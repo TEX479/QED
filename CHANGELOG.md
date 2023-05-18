@@ -1,6 +1,12 @@
-## 0_5_5_1
+# 18.05.2023
+## [system_0_5_5_1](https://github.com/TEX479/QED/blob/main/QED_system_0_5_5_1.py)
 ### added
-- [system](https://github.com/TEX479/QED/blob/main/QED_system_0_5_5_1.py)
-  funktion "Verschlüsselung.generate_key" which takes length of the wanted key and returns a string containing the key
+- funktion "Verschlüsselung.generate_key" which takes length of the wanted key and returns a string containing the key
 ### changed
+- nothin
 ### fixed
+- nothin
+
+## [gui_0_4_2](https://github.com/TEX479/QED/blob/main/QED_GUI_0_4_2.py) 
+### added
+- stuff to generate a random key and save it to a file
