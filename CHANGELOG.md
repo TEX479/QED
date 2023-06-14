@@ -12,7 +12,7 @@
 
 ## [gui_0_4_3](https://github.com/TEX479/QED/blob/main/QED_GUI_0_4_3.py.py) - 26.05.2023
 ### removed
-- `def BitToStr()`
+- `def BitToStr()` (replaced by `bytes()`)
 ### changed
 - list to set cores -> button with str input
 - adjustments for missing `BitToStr()`, replaced with `bytes()`
