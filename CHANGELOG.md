@@ -21,7 +21,7 @@
 
 ## [gui_0_4_3_special](https://github.com/TEX479/QED/blob/main/QED_GUI_0_4_3_special.py) - 04.06.2023
 ### added
-- special feature, so you can input a text, containing the number of cores to be used, which will be extracted as integer (text can be with words :D)
+- special feature, so you can input a text (can contain words :D), containing the number of cores to be used, which will be extracted as integer
 
 ## [gui_0_4_3](https://github.com/TEX479/QED/blob/main/QED_GUI_0_4_3.py) - 26.05.2023
 ### removed
