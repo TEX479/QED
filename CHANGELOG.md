@@ -19,7 +19,11 @@
 ### fixed
 - issue with running less than at least one core, crashing the programm
 
-## [gui_0_4_3](https://github.com/TEX479/QED/blob/main/QED_GUI_0_4_3.py.py) - 26.05.2023
+## [gui_0_4_3_special](https://github.com/TEX479/QED/blob/main/QED_GUI_0_4_3_special.py) - 04.06.2023
+### added
+- special feature, so you can input a text, containing the number of cores to be used, which will be extracted as integer (text can be with words :D)
+
+## [gui_0_4_3](https://github.com/TEX479/QED/blob/main/QED_GUI_0_4_3.py) - 26.05.2023
 ### removed
 - `def BitToStr()` (replaced by `bytes()`)
 ### changed
