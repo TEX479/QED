@@ -1,4 +1,13 @@
 # Changelog
+## [system_0_6_2](https://github.com/TEX479/QED/blob/main/QED_system_0_6_2.py) - 14.06.2023
+### fixed
+- issue with `_parallel_cores()` where planes outside of `cube_dimensions` are turned
+- generating `step_array` with 6 instead of `cube_dimensions` of last cube
+### changed
+- renamed & repurpoppsed `cube_old()` -> `cube_big()` with minor changes to workflow (back to front not front to back of text)
+### added
+- running `cube_big()` as a `20*20*20` cube taking as much of `cube()`'s `text` as possible to rotate
+
 ## [system_0_6_1](https://github.com/TEX479/QED/blob/main/QED_system_0_6_1.py) - 14.06.2023
 ### added
 - `def cube_old()`: alte version der `cube()`-funktion (used copypasta of "QED_system_0_5_0_1.py")
