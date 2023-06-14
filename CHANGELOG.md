@@ -2,6 +2,7 @@
 ## [system_0_6_3](https://github.com/TEX479/QED/blob/main/QED_system_0_6_3.py) - 14.06.2023
 ### fixed
 - `cube_big()` now has its own, longer (len() = 1000) `key_m_cube_big`
+... and a bunch of other shit that broke
 ### changed
 - `g` of `get_key_m_cube()` is now changable
 
