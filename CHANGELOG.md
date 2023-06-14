@@ -1,7 +1,7 @@
 # Changelog
 ## [system_0_6_1](https://github.com/TEX479/QED/blob/main/QED_system_0_6_1.py) - 14.06.2023
 ### added
-- `def cube_old()`: alte version der `cube()`-funktion
+- `def cube_old()`: alte version der `cube()`-funktion (used copypasta of "QED_system_0_5_0_1.py")
 
 ## [system_0_6_0](https://github.com/TEX479/QED/blob/main/QED_system_0_6_0.py) - 04.06.2023
 ### added
