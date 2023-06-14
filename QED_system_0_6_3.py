@@ -565,7 +565,7 @@ class Verschlüsselung():
         
         if len(text) >= (20*20*6):
             cube_field_data_size_local = len(text) // (20*20*6)
-            key_m_cube_big = self.get_key_m_cube(key_m_cube, 343, 1000)
+            key_m_cube_big = self.get_key_m_cube(self.hilfsfunktionen.int2anybase(key_m_cube, 42), 343, 1000)
             text = self.cube_big(text, key_m_cube_big, 20, cube_field_data_size_local, encryption)
         
         text_formatted = []#[("text", cube_dimensions), ("text", cube_dimensions), ...]
