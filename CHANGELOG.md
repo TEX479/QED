@@ -30,7 +30,7 @@
 - list to set cores -> button with str input
 - adjustments for missing `BitToStr()`, replaced with `bytes()`
 ### added
-- timing of de-/encryptionproccess
+- timing of de-/encryption-proccess
 
 ## [system_0_5_5_1](https://github.com/TEX479/QED/blob/main/QED_system_0_5_5_1.py) - 18.05.2023
 ### added
