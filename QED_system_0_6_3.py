@@ -135,7 +135,7 @@ class Verschlüsselung():
         while len(key_m_cube) < g:
             key_m_cube = int("".join(str(i) for i in key_m_cube))
             key_m_cube = self.hilfsfunktionen.int2anybase2(number=key_m_cube, base=1.7)
-            key_m_cube = int("".join(str(i*10)[:-2] for i in key_m_cube))
+            key_m_cube = "".join(str(i*10)[:-2] for i in key_m_cube)
             key_m_cube = [int(i) for i in key_m_cube]
         while len(key_m_cube) > g*1.7547956566698855:
             key_m_cube = self.hilfsfunktionen.anybase2anybase(number_=key_m_cube, input_base=10, output_base=5)# 5 -> ?
