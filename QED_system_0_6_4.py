@@ -1,12 +1,18 @@
 import math
 from random import randint
 import time
-from multiprocessing import Pool
 
+def BitToInt(s:str, anz_bit= 8) -> list:
+        r= []
+        for i in range(len(s)//anz_bit):
+            r.append(int(s[i*anz_bit:(i+1)*anz_bit], 2))
+        if len(s)%anz_bit != 0:
+            r.append(int(s[(len(s)//anz_bit)*anz_bit:], 2))
+        return r
 
 
 class Verschlüsselung():
-    def __init__(self, chunk = 16, debug = True, cube_field_data_size = 1, debug_c=False, cores=1) -> None:
+    def __init__(self, chunk = 16, debug = True, cube_field_data_size = 1, debug_c=False, debug_f=False) -> None:
         """
         debug_c -> debug für cube class
         debug   -> debug alles andere
@@ -18,7 +24,7 @@ class Verschlüsselung():
         self.chunk = chunk
         self.cube_field_data_size = cube_field_data_size
         self.debug_c = debug_c
-        self.cores = cores
+        self.debug_f = debug_f
 
     def get_key(self, KEY:str, text=""):
         """
@@ -112,7 +118,7 @@ class Verschlüsselung():
         erzeugt aus key_normal und key_start
         -> key_m_cube
 
-        g? wird hier gesetzt
+        g -> ungefähre länge im 18er system
         """
         key_m_cube = ""
         if sum(key_normal) > key_start:
@@ -135,7 +141,7 @@ class Verschlüsselung():
         while len(key_m_cube) < g:
             key_m_cube = int("".join(str(i) for i in key_m_cube))
             key_m_cube = self.hilfsfunktionen.int2anybase2(number=key_m_cube, base=1.7)
-            key_m_cube = "".join(str(i*10)[:-2] for i in key_m_cube)
+            key_m_cube = "".join(str(i*10).split(".")[0] for i in key_m_cube)
             key_m_cube = [int(i) for i in key_m_cube]
         while len(key_m_cube) > g*1.7547956566698855:
             key_m_cube = self.hilfsfunktionen.anybase2anybase(number_=key_m_cube, input_base=10, output_base=5)# 5 -> ?
@@ -154,10 +160,16 @@ class Verschlüsselung():
         keys = self.get_key(KEY=KEY, text=text)
         if self.debug: print("\n--- ENTSCHLÜSSELN ---\n")
         if self.debug: print("original:        ", text, "\n")
+        if self.debug_f: 
+            with open("ENT_0_original.txt", "wb") as f:
+                f.write(bytes(BitToInt(text)))
 
 
         text = self.structure_mix_letter(way=True,full_text_=text, key=keys["m"])
         if self.debug: print("nach mix_letter: ", text, "\n")
+        if self.debug_f: 
+            with open("ENT_1_nach_mix_letter.txt", "wb") as f:
+                f.write(bytes(BitToInt(text)))
 
 
         text_part = text[:keys["s"]*self.chunk]
@@ -167,14 +179,23 @@ class Verschlüsselung():
         text_ = text[keys["s"]*self.chunk:]
         text = text_part + text_#erw1
         if self.debug: print("nach erw1:       ", text, "\n")
+        if self.debug_f: 
+            with open("ENT_2_nach_m1_2.txt", "wb") as f:
+                f.write(bytes(BitToInt(text)))
 
 
-        text = self.cube(text=text, key_m_cube=keys["c"], encryption=not(True), cores=self.cores)
+        text = self.cube(text=text, key_m_cube=keys["c"], encryption=not(True))
         if self.debug: print("nach cube:       ", text, "\n")
+        if self.debug_f: 
+            with open("ENT_3_nach_cube.txt", "wb") as f:
+                f.write(bytes(BitToInt(text)))
 
 
         text = self.structure_m1(way=True, text=text, key=keys["n"].copy())
         if self.debug: print("nach m1:         ", text, "\n")
+        if self.debug_f: 
+            with open("ENT_4_nach_m1.txt", "wb") as f:
+                f.write(bytes(BitToInt(text)))
 
         return text
 
@@ -187,14 +208,22 @@ class Verschlüsselung():
         keys = self.get_key(KEY=KEY, text=text)
         if self.debug: print("\n--- VERSCHLÜSSELN ---\n")
         if self.debug: print("original:        ", text, "\n")
-
+        if self.debug_f: 
+            with open("VER_0_original.txt", "wb") as f:
+                f.write(bytes(BitToInt(text)))
 
         text = self.structure_m1(way=False, text=text, key=keys["n"].copy())
         if self.debug: print("nach m1:         ", text, "\n")
+        if self.debug_f: 
+            with open("VER_1_nach_m1.txt", "wb") as f:
+                f.write(bytes(BitToInt(text)))
 
 
-        text = self.cube(text=text, key_m_cube=keys["c"], encryption=not(False), cores=self.cores)
+        text = self.cube(text=text, key_m_cube=keys["c"], encryption=not(False))
         if self.debug: print("nach cube:       ", text, "\n")
+        if self.debug_f: 
+            with open("VER_2_nach_cube.txt", "wb") as f:
+                f.write(bytes(BitToInt(text)))
 
 
         text_part = text[:keys["s"]*self.chunk]
@@ -204,10 +233,16 @@ class Verschlüsselung():
         text_ = text[keys["s"]*self.chunk:]
         text = text_part + text_#erw1
         if self.debug: print("nach erw1:       ", text, "\n")
+        if self.debug_f: 
+            with open("VER_3_nach_m1_2.txt", "wb") as f:
+                f.write(bytes(BitToInt(text)))
 
 
         text = (self.structure_mix_letter(way=False, full_text_=text, key=keys["m"]))
         if self.debug: print("nach mix_letter: ", text, "\n")
+        if self.debug_f: 
+            with open("VER_4_nach_mix_letter.txt", "wb") as f:
+                f.write(bytes(BitToInt(text)))
 
         return text
 
@@ -499,6 +534,19 @@ class Verschlüsselung():
         
         return cube.copy()
     
+    def _cube_map_data_2(self, cube, text:list, cube_field_data_size=1):
+        '''
+        mappt <text> auf cube.<cube> zu <cube_field_data_size> großen chunks
+        '''
+        text_pointer = 0
+        for i1 in range(len(cube)):
+            for i2 in range(len(cube[i1])):
+                for i3 in range(len(cube[i1][i2])):
+                    cube[i1][i2][i3] = text[text_pointer]
+                    text_pointer += cube_field_data_size
+        
+        return cube.copy()
+
     def _cube_get_data(self, cube) -> str:
         '''
         nimmt cube.<cube> und returnt die daten als string
@@ -523,28 +571,7 @@ class Verschlüsselung():
         
         return text
 
-    def _parallel_cores(self, packed_data):
-        """
-        packed_data = ([("text_formatted1", cube_dimensions1), ...], step_array, nr, cube_field_data_size)
-        erzeugt und dreht Würfel der größe cube_dimensions mit text_formatted auf den Flächen
-        returnt (nr, text_scrambled) -> (int, ["", ...])
-        """
-        step_array = packed_data[1]
-        nr = packed_data[2]
-        cube_field_data_size = packed_data[3]
-
-        text_scrambled = []
-        for i in packed_data[0]:
-            text_formatted = i[0]
-            cube_dimensions = i[1]
-            cube = self.cube_class(cube_dimensions, self.debug_c)
-            cube.cube = self._cube_map_data(cube.cube.copy(), text_formatted, cube_field_data_size)
-            for i2 in step_array:
-                cube.rotate(i2[0], i2[1]%cube_dimensions, i2[2]+4)
-            text_scrambled.append(self._cube_get_data(cube.cube.copy()))
-        return (nr, text_scrambled)
-
-    def cube(self, text, key_m_cube, cube_dimensions=0, cube_field_data_size=0, encryption=True, cores=0):
+    def cube(self, text, key_m_cube, cube_dimensions=0, cube_field_data_size=0, encryption=True):
         '''
         mappt <text> in <cube_field_data_size> großen stücken auf die oberfläche eines rubics-cube
         mit <cube_dimensions> "flächen" (das entscheidet also obs ein 3x3x3, 4x4x4, ... ist)
@@ -558,32 +585,40 @@ class Verschlüsselung():
         if cube_field_data_size == 0:
             cube_field_data_size = self.cube_field_data_size
         
-        if (len(text) >= (20*20*6)) and encryption:
+        """if (len(text) >= (20*20*6)) and encryption:
             cube_field_data_size_local = len(text) // (20*20*6)
-            key_m_cube_big = self.get_key_m_cube(self.hilfsfunktionen.int2anybase(key_m_cube, 42), 343, 1000)
-            text = self.cube_big(text, key_m_cube_big, 20, cube_field_data_size_local, encryption)
+            key_m_cube_big = self.hilfsfunktionen.int2anybase(key_m_cube, 42)
+            key_m_cube_big = int(
+                str(self.get_key_m_cube(key_m_cube_big[:len(key_m_cube_big)//2], 343, 1000//2)) + 
+                str(self.get_key_m_cube(key_m_cube_big[len(key_m_cube_big)//2:], 343, 1000//2)))
+            text = self.cube_big(text, key_m_cube_big, 20, cube_field_data_size_local, encryption)"""
 
+        # Zerlegen in 216er Teile
         text_formatted = []
         for i in range(len(text)//216): # 6*6*6 = 216
             text_formatted.append(list(text[i*216:(i+1)*216]))
         if len(text)%216 != 0:
             text_formatted.append(list(text[(len(text)//216)*216:]))
 
-        step_array = self._cube_int_to_moves(key_m_cube, 6, encryption)
+        step_array = self._cube_int_to_moves(key_m_cube, 6, True)
         cube = self.cube_class(6,self.debug_c)
-        cube.cube = self._cube_map_data(cube.cube.copy(), [i+1 for i in range(1, 217, 1)], 1) # 1, 217 -> 1,2,3,...215,216
+        cube.cube = self._cube_map_data_2(cube.cube.copy(), [i for i in range(1, 217, 1)], 1) # 1, 217 -> 1,2,3,...215,216
         for i2 in step_array:
             cube.rotate(i2[0], i2[1], i2[2]+4)
-        key_m_cube = self._cube_get_data_2(cube.cube.copy())
+        key_m_cube_2 = self._cube_get_data_2(cube.cube.copy())
 
         text_scrambled_ = ""
         for i in text_formatted:
-            text_scrambled_ += "".join(i2 for i2 in self.mix_letter(text=i, key=key_m_cube, way=not(encryption)))
+            text_scrambled_ += "".join(i2 for i2 in self.mix_letter(text=i, key=key_m_cube_2, way=not(encryption)))
+        text_scrambled_ = text
         
-        if (len(text_scrambled_) >= (20*20*6)) and not(encryption):
-            cube_field_data_size_local = len(text_scrambled_) // (20*20*6)
-            key_m_cube_big = self.get_key_m_cube(self.hilfsfunktionen.int2anybase(key_m_cube, 42), 343, 1000)
-            text_scrambled_ = self.cube_big(text_scrambled_, key_m_cube_big, 20, cube_field_data_size_local, encryption)
+        """if (len(text_scrambled_) >= (20*20*6)) and not(encryption):
+            cube_field_data_size_local = len(text) // (20*20*6)
+            key_m_cube_big = self.hilfsfunktionen.int2anybase(key_m_cube, 42)
+            key_m_cube_big = int(
+                str(self.get_key_m_cube(key_m_cube_big[:len(key_m_cube_big)//2], 343, 1000//2)) + 
+                str(self.get_key_m_cube(key_m_cube_big[len(key_m_cube_big)//2:], 343, 1000//2)))
+            text = self.cube_big(text, key_m_cube_big, 20, cube_field_data_size_local, encryption)"""
 
         return text_scrambled_
     
@@ -646,10 +681,10 @@ class Verschlüsselung():
 
         def int2anybase2(number:int, base:float):
             number_ = []
-            l_komma = 10**len((str(base).split("."))[1])
+            #l_komma = 10**len((str(base).split("."))[1])
             while number > 0:
-                number_.append((number*l_komma)%(base*l_komma)/l_komma)
-                number = (number*l_komma)//(base*l_komma)/l_komma
+                number_.append(round(number%base, 1))
+                number = number//base
             number_.reverse()
             return number_
 
@@ -676,8 +711,7 @@ def run_test():
     #print("new process")
     debug = False
     debug_c = False
-    cores = 10
-    x = Verschlüsselung(debug=debug, debug_c=debug_c, cores=cores)
+    x = Verschlüsselung(debug=debug, debug_c=debug_c, debug_f=False)
 
     test = ""
     key = ""
@@ -699,13 +733,16 @@ if __name__ == "__main__":
     N_list = []
     p=[]
     t = time.time()
-    for i in range(100):
+    r = 10
+    print(f"\r0\tvon {r}", end="")
+    for i in range(r):
         """p.append(multiprocessing.Process(target = run_test))
         p[i].start()
         p[i].join()"""
         run_test()
+        print(f"\r{i+1}\tvon {r}", end="")
     t = time.time() - t
-    print("Y:", Y, "|", "N:", N, "|", "D:", t)
+    print("\nY:", Y, "|", "N:", N, "|", "D:", t)
     #print(N_list)
 
 else:
