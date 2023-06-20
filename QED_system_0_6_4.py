@@ -585,13 +585,11 @@ class Verschlüsselung():
         if cube_field_data_size == 0:
             cube_field_data_size = self.cube_field_data_size
         
-        """if (len(text) >= (20*20*6)) and encryption:
+        if (len(text) >= (20*20*6)) and encryption:
             cube_field_data_size_local = len(text) // (20*20*6)
             key_m_cube_big = self.hilfsfunktionen.int2anybase(key_m_cube, 42)
-            key_m_cube_big = int(
-                str(self.get_key_m_cube(key_m_cube_big[:len(key_m_cube_big)//2], 343, 1000//2)) + 
-                str(self.get_key_m_cube(key_m_cube_big[len(key_m_cube_big)//2:], 343, 1000//2)))
-            text = self.cube_big(text, key_m_cube_big, 20, cube_field_data_size_local, encryption)"""
+            key_m_cube_big = int(str(self.get_key_m_cube(key_m_cube_big, 343, 1000)))
+            text = self.cube_big(text, key_m_cube_big, 20, cube_field_data_size_local, encryption)
 
         # Zerlegen in 216er Teile
         text_formatted = []
@@ -607,20 +605,18 @@ class Verschlüsselung():
             cube.rotate(i2[0], i2[1], i2[2]+4)
         key_m_cube_2 = self._cube_get_data_2(cube.cube.copy())
 
-        text_scrambled_ = ""
+        text_scrambled = ""
         for i in text_formatted:
-            text_scrambled_ += "".join(i2 for i2 in self.mix_letter(text=i, key=key_m_cube_2, way=not(encryption)))
-        text_scrambled_ = text
+            text_scrambled += "".join(i2 for i2 in self.mix_letter(text=i, key=key_m_cube_2, way=not(encryption)))
+        #text_scrambled = text # nur für tests da!
         
-        """if (len(text_scrambled_) >= (20*20*6)) and not(encryption):
-            cube_field_data_size_local = len(text) // (20*20*6)
+        if (len(text_scrambled) >= (20*20*6)) and not(encryption):
+            cube_field_data_size_local = len(text_scrambled) // (20*20*6)
             key_m_cube_big = self.hilfsfunktionen.int2anybase(key_m_cube, 42)
-            key_m_cube_big = int(
-                str(self.get_key_m_cube(key_m_cube_big[:len(key_m_cube_big)//2], 343, 1000//2)) + 
-                str(self.get_key_m_cube(key_m_cube_big[len(key_m_cube_big)//2:], 343, 1000//2)))
-            text = self.cube_big(text, key_m_cube_big, 20, cube_field_data_size_local, encryption)"""
+            key_m_cube_big = int(str(self.get_key_m_cube(key_m_cube_big, 343, 1000)))
+            text_scrambled = self.cube_big(text_scrambled, key_m_cube_big, 20, cube_field_data_size_local, encryption)
 
-        return text_scrambled_
+        return text_scrambled
     
     def cube_big(self, text, key_m_cube, cube_dimensions=0, cube_field_data_size=0, encryption=True) -> str:
         '''
@@ -633,17 +629,9 @@ class Verschlüsselung():
 
         -> return text_verdreht
         '''
-        if cube_field_data_size == 0:
-            cube_field_data_size = self.cube_field_data_size
-
-        if cube_dimensions == 0:
-            cube_dimensions = int((len(text) // cube_field_data_size // 6) ** 0.5)
-        
-        if cube_dimensions == 0:
-            raise fehler("\"text\" darf nicht kleiner (6 * \"cube_field_data_size\") sein.")
         
         text = text[::-1]
-        text_formatted = text[:(cube_dimensions**2 *6)]
+        text_formatted = text[:(cube_dimensions**2 *6 *cube_field_data_size)]
         text = text[::-1]
         text_formatted = text_formatted[::-1]
 
@@ -683,8 +671,8 @@ class Verschlüsselung():
             number_ = []
             #l_komma = 10**len((str(base).split("."))[1])
             while number > 0:
-                number_.append(round(number%base, 1))
-                number = number//base
+                number_.append(((number*10)%int(base*10))/10)
+                number = (number*10)//int(base*10)
             number_.reverse()
             return number_
 
