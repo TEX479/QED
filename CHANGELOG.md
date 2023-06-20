@@ -1,4 +1,8 @@
 # Changelog
+## [system_0_6_4](https://github.com/TEX479/QED/blob/main/QED_system_0_6_4.py) 15-20.06.2023
+### fixed
+- `cube_big()` wasn't working properly, now does
+
 ## [system_0_6_3](https://github.com/TEX479/QED/blob/main/QED_system_0_6_3.py) - 14.06.2023
 ### fixed
 - `cube_big()` now has its own, longer (len() = 1000) `key_m_cube_big`
