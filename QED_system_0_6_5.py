@@ -721,7 +721,7 @@ if __name__ == "__main__":
     p=[]
     t = time.time()
     r = 100
-    print(f"\r0\tvon {r}", end="")
+    print(f"0\tvon {r}", end="")
     for i in range(r):
         """p.append(multiprocessing.Process(target = run_test))
         p[i].start()
