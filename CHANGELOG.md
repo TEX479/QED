@@ -89,4 +89,4 @@
 - comment to speed up `structure_m1()`
 
 ## [system_0_1](https://github.com/TEX479/QED/QED_system_0_1.py) - ???
-yes
+- started using the system/gui seperation bc it's just better
