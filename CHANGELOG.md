@@ -67,7 +67,7 @@
 ### changed
 - `run_test()` now uses random inputs contrary to the previous fixed ones
 
-## [system_0_4](https://github.com/TEX479/QED/QED_system_0_4.py) (dc-link)[https://discord.com/channels/@me/641270189035487232/1080925878638358558] - ???
+## [system_0_4](https://github.com/TEX479/QED/QED_system_0_4.py) [dc-link](https://discord.com/channels/@me/641270189035487232/1080925878638358558) - ???
 
 ## [system_0_3_](https://github.com/TEX479/QED/QED_system_0_3_.py) - ???
 ### fixed
