@@ -54,3 +54,39 @@
 ## [gui_0_4_2](https://github.com/TEX479/QED/blob/main/QED_GUI_0_4_2.py) - 18.05.2023
 ### added
 - stuff to generate a random key and save it to a file
+
+## [system_0_4_1](https://github.com/TEX479/QED/QED_system_0_4_1.py) - ???
+
+## [system_0_4_0](https://github.com/TEX479/QED/QED_system_0_4_0.py) - ???
+### fixed
+- some minor stuff in `verschlüsseln()` & `entschlüsseln()`
+### added
+- some typehinting
+### removed
+- some commented code, wich isnt necesarry anymore
+### changed
+- `run_test()` now uses random inputs contrary to the previous fixed ones
+
+## [system_0_3_](https://github.com/TEX479/QED/QED_system_0_3_.py) - ???
+### fixed
+- idk, probably some minor fixes as well
+### added
+- textformatting in `verschlüsseln()` & `entschlüsseln()`
+- fixed inputs for `run_test()`
+
+## [system_0_2](https://github.com/TEX479/QED/QED_system_0_2.py) - ???
+### fixed
+- minor fixes in `get_key()`
+- something not working in `structure_mix_letter()`
+### changed
+- almost entire `mix_letter()`
+- `run_test()` and other testing-purposed code
+- `structure_mix_letter()` uses a local `chunk` variable
+### removed
+- some `if self.debug: print()` statements
+- not working bits in `entschlüsseln()` & `verschlüsseln()`
+- comment to improve `VER_1()`
+- comment to speed up `structure_m1()`
+
+## [system_0_1](https://github.com/TEX479/QED/QED_system_0_1.py) - ???
+yes
