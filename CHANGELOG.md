@@ -47,19 +47,59 @@
 ### added
 - timing of de-/encryption-proccess
 
+## [system_0_5_5_2](https://github.com/TEX479/QED/blob/main/QED_system_0_5_5_2.py) - ???
+### changed
+- variable-names inside of `get_key()` for better readability
+### added
+- explanation-comment in `generate_key()`
+
 ## [system_0_5_5_1](https://github.com/TEX479/QED/blob/main/QED_system_0_5_5_1.py) - 18.05.2023
 ### added
 - `def Verschlüsselung.generate_key()` which takes length of the wanted key and returns a string containing the key
+### changed
+- some comments again. added some, changed some, removed some.
 
 ## [gui_0_4_2](https://github.com/TEX479/QED/blob/main/QED_GUI_0_4_2.py) - 18.05.2023
 ### added
 - stuff to generate a random key and save it to a file
 
+## [system_0_5_5](https://github.com/TEX479/QED/QED_system_0_5_5.py) - ???
+### added
+- many comments stating the purpose of code for better readability
+### changed
+- something inside `structure_mix_letter()` to not include `StrToBit()` & `BitToStr()` anymore (bc the use of these functions was unnecessary)
+### removed
+- unneccesary comment (basically unused code) at the end of the file (this is dating back to the stoneage)
+- `StrToBit()` & `BitToStr()` inside `hilfsfunktionen()`
+
+## [system_0_5_4](https://github.com/TEX479/QED/QED_system_0_5_4.py) - ???
+### changed
+- `get_key()`: simplified `len(self.hilfsfunktionen.BitToStr(text, self.chunk))` to `len(text)//self.chunk`
+### added
+- any call of not cube related en- or decryption functions inside of `entschlüsseln()` & `verschlüsseln` that got removed in [system_0_5_1](https://github.com/TEX479/QED/QED_system_0_5_1.py)
+
+## [system_0_5_3](https://github.com/TEX479/QED/QED_system_0_5_3.py) - ???
+### added
+- `hilfsfunktionen.int2anybase2()` (i dont remember the difference)
+- debug print of `step_array`s length inside of `_cube_int_to_moves()`
+- some more algorithmic stuff for `get_key_m_cube()`
+
+## [system_0_5_2](https://github.com/TEX479/QED/QED_system_0_5_2.py) - ???
+### fixed
+- issue inside of `cube()` where outputs of different cores where not handled correctly
+### added
+- algorithm for hashing-method inside of `get_key_m_cube()`, which is based on using different based numbers
+
 ## [system_0_5_1](https://github.com/TEX479/QED/QED_system_0_5_1.py) - ???
 NOTE:
 This version is the end of the `cube_class()`-branch. It combines both branches to the new 'main'-one. This means, there is now a `cube_class()` with implementation and all other changes of [system_0_4_3](https://github.com/TEX479/QED/QED_system_0_4_3.py) and [system_0_4_2](https://github.com/TEX479/QED/QED_system_0_4_2.py) are already implemented and might already be outdated. The merging happend within [system_0_5_0](https://github.com/TEX479/QED/QED_system_0_5_0.py), [system_0_5_0(1)](https://github.com/TEX479/QED/QED_system_0_5_0(1).py) & [system_0_5_0_1](https://github.com/TEX479/QED/QED_system_0_5_0_1.py). There was much going on, so the merging process will just be skipped for this log. This means that this entry is a change comparision between [system_0_4_3](https://github.com/TEX479/QED/QED_system_0_4_3.py) (and [system_0_4_2_k](https://github.com/TEX479/QED/QED_system_0_4_2_k.py)) and [system_0_5_1](https://github.com/TEX479/QED/QED_system_0_5_1.py)
 ### added
-- 
+- `cube()`: function, called in `entschlüsseln()` & `verschlüsseln`. It mapps `text` to an `cube_dimensions`^3 rubics cube in chunks of `cube_field_data_size` and scrables/solves (depending on `encryption`) this cube using the `key_m_cube`
+- `_cube_map_data()`: used to map information to the cubes faces
+- `_cube_get_data()`: used to retrieve information from a given cubes faces
+- `_cube_int_to_moves()`: used to generate the scramling moves for the cube. moves are generated based on `key_m_cube`
+- `_parallel_cores()`: used to scramble/solve the cubes in parallel using pythons `multiprocessing` library.
+- `hilfsfunktionen.anybase2anybase()`: capable of converting a list of integers to another list of integers, bith representing a number of some bases
 ### changed
 - `StrToBit()`, `BitToStr()` and `IntToBit()` are now part of a class named `hilfsfunktionen()` inside of `Verschlüsselung()`
 - `get_key()` (idk what the reason was, i might add it later on)
@@ -139,4 +179,7 @@ This version was created at the same time as `system_0_4_2`. there for it has no
 - comment to speed up `structure_m1()`
 
 ## [system_0_1](https://github.com/TEX479/QED/QED_system_0_1.py) - ???
+idk what even happend here. many things got changed, added or removed
+
+## [system_0](https://github.com/TEX479/QED/QED_system_0.py) - ???
 - started using the system/gui seperation bc it's just better
