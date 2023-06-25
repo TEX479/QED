@@ -55,8 +55,28 @@
 ### added
 - stuff to generate a random key and save it to a file
 
+## [system_0_5_1](https://github.com/TEX479/QED/QED_system_0_5_1.py) - ???
+NOTE:
+This version is the end of the `cube_class()`-branch. It combines both branches to the new 'main'-one. This means, there is now a `cube_class()` with implementation and all other changes of [system_0_4_3](https://github.com/TEX479/QED/QED_system_0_4_3.py) and [system_0_4_2](https://github.com/TEX479/QED/QED_system_0_4_2.py) are already implemented and might already be outdated. The merging happend within [system_0_5_0](https://github.com/TEX479/QED/QED_system_0_5_0.py), [system_0_5_0(1)](https://github.com/TEX479/QED/QED_system_0_5_0(1).py) & [system_0_5_0_1](https://github.com/TEX479/QED/QED_system_0_5_0_1.py). There was much going on, so the merging process will just be skipped for this log. This means that this entry is a change comparision between [system_0_4_3](https://github.com/TEX479/QED/QED_system_0_4_3.py) (and [system_0_4_2_k](https://github.com/TEX479/QED/QED_system_0_4_2_k.py)) and [system_0_5_1](https://github.com/TEX479/QED/QED_system_0_5_1.py)
+### added
+- 
+### changed
+- `StrToBit()`, `BitToStr()` and `IntToBit()` are now part of a class named `hilfsfunktionen()` inside of `Verschlüsselung()`
+- `get_key()` (idk what the reason was, i might add it later on)
+- complete change on `get_key_m_cube()`
+- mostly reverted `VER_1()` to an older version that has better error handeling (if im not mistaking)
+- inner workings of `structure_m1()` (probably as a bugfix, but who knows :man_shrugging:)
+### removed
+- any call of not cube related en- or decryption functions inside of `entschlüsseln()` & `verschlüsseln`
+
+## [system_0_5_0](https://github.com/TEX479/QED/QED_system_0_5_0.py), [system_0_5_0(1)](https://github.com/TEX479/QED/QED_system_0_5_0(1).py) & [system_0_5_0_1](https://github.com/TEX479/QED/QED_system_0_5_0_1.py) - ???
+NOTE:
+Idk which version came first and they are kind of weird so i'll just ignore them for now. That also means, the changelog of `system_0_5_1` reffers to changes to `system_0_4_3`.
+
 ## [system_0_4_3](https://github.com/TEX479/QED/QED_system_0_4_3.py) - ???
-This is still part of the 'main' branch, so a follow-up of `system_0_4_2`
+This is still part of the 'main' branch, so a follow-up of `system_0_4_2`. There are some changes, working towards joining the  branches together
+### added
+- `get_key_m_cube()`: function to generate `key_m_cube` wich functions as a seed for rotating the rubics-cubes
 ### changed
 - simplified and generalized `VER_1()` 
 - simplified `structure_m1`
@@ -91,7 +111,7 @@ This version was created at the same time as `system_0_4_2`. there for it has no
 
 ## [system_0_4](https://github.com/TEX479/QED/QED_system_0_4.py) [dc-link](https://discord.com/channels/@me/641270189035487232/1080925878638358558) - ???
 - same as 0_3, features didnt work fully, so they are mostly commented out, also had some errors, that where fixed
-- `system_0_4_0` will contain a full update for the changelog since this will be the major new version
+- [system_0_4_0](https://github.com/TEX479/QED/QED_system_0_4_0.py) will contain a full update for the changelog since this will be the major new version
 
 ## [system_0_3_](https://github.com/TEX479/QED/QED_system_0_3_.py) - ???
 ### fixed
