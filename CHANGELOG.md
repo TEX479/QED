@@ -181,5 +181,8 @@ This version was created at the same time as `system_0_4_2`. there for it has no
 ## [system_0_1](https://github.com/TEX479/QED/QED_system_0_1.py) - ???
 idk what even happend here. many things got changed, added or removed
 
+## [gui_0](https://github.com/TEX479/QED/QED_GUI_0.py) - ???
+- started using the system/gui seperation bc it's just better
+
 ## [system_0](https://github.com/TEX479/QED/QED_system_0.py) - ???
 - started using the system/gui seperation bc it's just better
