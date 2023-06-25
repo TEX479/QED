@@ -55,7 +55,29 @@
 ### added
 - stuff to generate a random key and save it to a file
 
+## [system_0_4_3](https://github.com/TEX479/QED/QED_system_0_4_3.py) - ???
+This is still part of the 'main' branch, so a follow-up of `system_0_4_2`
+### changed
+- simplified and generalized `VER_1()` 
+- simplified `structure_m1`
+
+## [system_0_4_2_k](https://github.com/TEX479/QED/QED_system_0_4_2_k.py) - ???
+### NOTE:
+This version was created at the same time as `system_0_4_2`. there for it has not yet implemented its changes. So it's basically a fork of `system_0_4_1`.
+### added
+- `int2anybase()`: function that is capable of converting an integer to a list of integers, representing a number of any given base
+- `cube_class()`: this class inside of `Verschlüsselung()` is a class, capable of simulating n-dimensional rubics-cubes (n: int, n > 0). This class is not beeing called yet.
+
+## [system_0_4_2](https://github.com/TEX479/QED/QED_system_0_4_2.py) - ???
+### changed
+- `VER_1()` got a massive overhaul and now has a built in variable to work both ways (de- and encryption): `way: bool`
+- `structure_m1()` now has better error handeling
+
 ## [system_0_4_1](https://github.com/TEX479/QED/QED_system_0_4_1.py) - ???
+### fixed
+- minor errors in `structure_mix_letter()` regarding `StrToBit()`
+### removed
+- just some debug print statements
 
 ## [system_0_4_0](https://github.com/TEX479/QED/QED_system_0_4_0.py) - ???
 ### fixed
@@ -68,6 +90,8 @@
 - `run_test()` now uses random inputs contrary to the previous fixed ones
 
 ## [system_0_4](https://github.com/TEX479/QED/QED_system_0_4.py) [dc-link](https://discord.com/channels/@me/641270189035487232/1080925878638358558) - ???
+- same as 0_3, features didnt work fully, so they are mostly commented out, also had some errors, that where fixed
+- `system_0_4_0` will contain a full update for the changelog since this will be the major new version
 
 ## [system_0_3_](https://github.com/TEX479/QED/QED_system_0_3_.py) - ???
 ### fixed
@@ -75,6 +99,10 @@
 ### added
 - textformatting in `verschlüsseln()` & `entschlüsseln()`
 - fixed inputs for `run_test()`
+
+## [system_0_3](https://github.com/TEX479/QED/QED_system_0_3.py) - ???
+- just a version previous to 0_3_, features didnt work fully, so they are mostly commented out
+- `system_0_3_` will contain a full update for the changelog since this will be the major new version
 
 ## [system_0_2](https://github.com/TEX479/QED/QED_system_0_2.py) - ???
 ### fixed
