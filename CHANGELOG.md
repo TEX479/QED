@@ -76,7 +76,7 @@
 ### changed
 - `get_key()`: simplified `len(self.hilfsfunktionen.BitToStr(text, self.chunk))` to `len(text)//self.chunk`
 ### added
-- any call of not cube related en- or decryption functions inside of `entschlüsseln()` & `verschlüsseln` that got removed in [system_0_5_1](https://github.com/TEX479/QED/QED_system_0_5_1.py)
+- any call of not cube related en- or decryption functions inside of `entschlüsseln()` & `verschlüsseln` that got removed in [system_0_5_1](https://github.com/TEX479/QED/blob/main/CHANGELOG.md#removed-2)
 
 ## [system_0_5_3](https://github.com/TEX479/QED/QED_system_0_5_3.py) - ???
 ### added
@@ -92,7 +92,7 @@
 
 ## [system_0_5_1](https://github.com/TEX479/QED/QED_system_0_5_1.py) - ???
 NOTE:
-This version is the end of the `cube_class()`-branch. It combines both branches to the new 'main'-one. This means, there is now a `cube_class()` with implementation and all other changes of [system_0_4_3](https://github.com/TEX479/QED/QED_system_0_4_3.py) and [system_0_4_2](https://github.com/TEX479/QED/QED_system_0_4_2.py) are already implemented and might already be outdated. The merging happend within [system_0_5_0](https://github.com/TEX479/QED/QED_system_0_5_0.py), [system_0_5_0(1)](https://github.com/TEX479/QED/QED_system_0_5_0(1).py) & [system_0_5_0_1](https://github.com/TEX479/QED/QED_system_0_5_0_1.py). There was much going on, so the merging process will just be skipped for this log. This means that this entry is a change comparision between [system_0_4_3](https://github.com/TEX479/QED/QED_system_0_4_3.py) (and [system_0_4_2_k](https://github.com/TEX479/QED/QED_system_0_4_2_k.py)) and [system_0_5_1](https://github.com/TEX479/QED/QED_system_0_5_1.py)
+This version is the end of the `cube_class()`-branch. It combines both branches to the new 'main'-one. This means, there is now a `cube_class()` with implementation and all other changes of [system_0_4_3](https://github.com/TEX479/QED/blob/main/CHANGELOG.md#system_0_4_3---) and [system_0_4_2](https://github.com/TEX479/QED/blob/main/CHANGELOG.md#system_0_4_2---) are already implemented and might already be outdated. The merging happend within [system_0_5_0](https://github.com/TEX479/QED/blob/main/CHANGELOG.md#system_0_5_0-system_0_5_01--system_0_5_0_1---), [system_0_5_0(1)](https://github.com/TEX479/QED/blob/main/CHANGELOG.md#system_0_5_0-system_0_5_01--system_0_5_0_1---) & [system_0_5_0_1](https://github.com/TEX479/QED/blob/main/CHANGELOG.md#system_0_5_0-system_0_5_01--system_0_5_0_1---). There was much going on, so the merging process will just be skipped for this log. This means that this entry is a change comparision between [system_0_4_3](https://github.com/TEX479/QED/blob/main/CHANGELOG.md#system_0_4_2---) (and [system_0_4_2_k](https://github.com/TEX479/QED/blob/main/CHANGELOG.md#system_0_4_2_k---)) and [system_0_5_1](https://github.com/TEX479/QED/blob/main/CHANGELOG.md#system_0_5_1---)
 ### added
 - `cube()`: function, called in `entschlüsseln()` & `verschlüsseln`. It mapps `text` to an `cube_dimensions`^3 rubics cube in chunks of `cube_field_data_size` and scrables/solves (depending on `encryption`) this cube using the `key_m_cube`
 - `_cube_map_data()`: used to map information to the cubes faces
