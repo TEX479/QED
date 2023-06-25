@@ -151,7 +151,7 @@ This version was created at the same time as `system_0_4_2`. there for it has no
 
 ## [system_0_4](https://github.com/TEX479/QED/QED_system_0_4.py) [dc-link](https://discord.com/channels/@me/641270189035487232/1080925878638358558) - ???
 - same as 0_3, features didnt work fully, so they are mostly commented out, also had some errors, that where fixed
-- [system_0_4_0](https://github.com/TEX479/QED/QED_system_0_4_0.py) will contain a full update for the changelog since this will be the major new version
+- [system_0_4_0](https://github.com/TEX479/QED/blob/main/CHANGELOG.md#system_0_4_0---) will contain a full update for the changelog since this will be the major new version
 
 ## [system_0_3_](https://github.com/TEX479/QED/QED_system_0_3_.py) - ???
 ### fixed
