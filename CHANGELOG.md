@@ -76,7 +76,7 @@
 ### changed
 - `get_key()`: simplified `len(self.hilfsfunktionen.BitToStr(text, self.chunk))` to `len(text)//self.chunk`
 ### added
-- any call of not cube related en- or decryption functions inside of `entschlüsseln()` & `verschlüsseln` that got removed in [system_0_5_1](https://github.com/TEX479/QED/blob/main/CHANGELOG.md#removed-2)
+- any call of not cube related en- or decryption functions inside of `entschlüsseln()` & `verschlüsseln` that got removed in [system_0_5_1](https://github.com/TEX479/QED/blob/main/CHANGELOG.md#system_0_5_1---)
 
 ## [system_0_5_3](https://github.com/TEX479/QED/QED_system_0_5_3.py) - ???
 ### added
