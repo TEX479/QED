@@ -21,3 +21,16 @@ Use this section to tell people how to report a vulnerability.
 Tell them where to go, how often they can expect to get an update on a
 reported vulnerability, what to expect if the vulnerability is accepted or
 declined, etc.
+
+new section
+=======================
+
+#### hidden field with metadata 👇
+
+<div class="meta_for_parser tablespecs" style="visibility:hidden">{"dataname":"environment","colvar":"varname","colval":"value"}</div>
+
+#### hidden field with metadata 👆
+
+#### comment:
+<!-- This is commented out. -->
+test <!-- test>
