@@ -180,6 +180,14 @@ This version was created at the same time as `system_0_4_2`. there for it has no
 
 ## [system_0_1](https://github.com/TEX479/QED/QED_system_0_1.py) - ???
 idk what even happend here. many things got changed, added or removed
+### fixed
+- multiple bugs, for example
+### changed
+- `text['o']`, `text['v']` & `tex['e']` -> `text: str`
+### added
+- `run_test()`: does exactly what you think it does
+- multiple print statements for debugging purposes (after each conversion of text)
+- type-hinting for output of functions
 
 ## [gui_0](https://github.com/TEX479/QED/QED_GUI_0.py) - ???
 - started using the system/gui seperation bc it's just better
