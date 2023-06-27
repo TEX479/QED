@@ -10,6 +10,8 @@
 - `run_test()`: indicator showing the ammount of completed tests compared to total tests
 ### changed
 - `cube()`: now there is only one instance of a `cube_class()`, which rotates an 'index_array', indicating the rotation for multiple cubes. this replaces the old (resource intensive) methode using multiprocessing
+### removed
+- multiprocessing (not needed bc the code was improved)
 
 ## [system_0_6_3](https://github.com/TEX479/QED/blob/main/QED_system_0_6_3.py) - 14.06.2023
 ### fixed
