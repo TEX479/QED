@@ -8,6 +8,8 @@
 - `cube_big()` wasn't working properly, now does
 ### added
 - `run_test()`: indicator showing the ammount of completed tests compared to total tests
+- added `BitToInt()` for filedebugging
+- filedebugging: runns if `self.debug_f`, saves text-states to files for debugging (certain characters are not printable so debugging didnt work fully before)
 ### changed
 - `cube()`: now there is only one instance of a `cube_class()`, which rotates an 'index_array', indicating the rotation for multiple cubes. this replaces the old (resource intensive) methode using multiprocessing
 ### removed
