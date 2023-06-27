@@ -6,6 +6,10 @@
 ## [system_0_6_4](https://github.com/TEX479/QED/blob/main/QED_system_0_6_4.py) 15-20.06.2023
 ### fixed
 - `cube_big()` wasn't working properly, now does
+### added
+- `run_test()`: indicator showing the ammount of completed tests compared to total tests
+### changed
+- `cube()`: now there is only one instance of a `cube_class()`, which rotates an 'index_array', indicating the rotation for multiple cubes. this replaces the old (resource intensive) methode using multiprocessing
 
 ## [system_0_6_3](https://github.com/TEX479/QED/blob/main/QED_system_0_6_3.py) - 14.06.2023
 ### fixed
