@@ -181,7 +181,7 @@ This version was created at the same time as `system_0_4_2`. there for it has no
 ## [system_0_1](https://github.com/TEX479/QED/QED_system_0_1.py) - ???
 idk what even happend here. many things got changed, added or removed
 ### fixed
-- multiple bugs, for example
+- multiple bugs
 ### changed
 - `text['o']`, `text['v']` & `tex['e']` -> `text: str`
 ### added
