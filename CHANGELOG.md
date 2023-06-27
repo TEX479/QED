@@ -92,7 +92,7 @@
 
 ## [system_0_5_1](https://github.com/TEX479/QED/QED_system_0_5_1.py) - ???
 NOTE:
-This version is the end of the `cube_class()`-branch. It combines both branches to the new 'main'-one. This means, there is now a `cube_class()` with implementation and all other changes of [system_0_4_3](https://github.com/TEX479/QED/blob/main/CHANGELOG.md#system_0_4_3---) and [system_0_4_2](https://github.com/TEX479/QED/blob/main/CHANGELOG.md#system_0_4_2---) are already implemented and might already be outdated. The merging happend within [system_0_5_0](https://github.com/TEX479/QED/blob/main/CHANGELOG.md#system_0_5_0-system_0_5_01--system_0_5_0_1---), [system_0_5_0(1)](https://github.com/TEX479/QED/blob/main/CHANGELOG.md#system_0_5_0-system_0_5_01--system_0_5_0_1---) & [system_0_5_0_1](https://github.com/TEX479/QED/blob/main/CHANGELOG.md#system_0_5_0-system_0_5_01--system_0_5_0_1---). There was much going on, so the merging process will just be skipped for this log. This means that this entry is a change comparision between [system_0_4_3](https://github.com/TEX479/QED/blob/main/CHANGELOG.md#system_0_4_3---) (and [system_0_4_2_k](https://github.com/TEX479/QED/blob/main/CHANGELOG.md#system_0_4_2_k---)) and [system_0_5_1](https://github.com/TEX479/QED/blob/main/CHANGELOG.md#system_0_5_1---)
+This version is the end of the `cube_class()`-branch. It combines both branches to the new 'main'-one. This means, there is now a `cube_class()` with implementation and all other changes of [system_0_4_3](https://github.com/TEX479/QED/blob/main/CHANGELOG.md#system_0_4_3---) and [system_0_4_2](https://github.com/TEX479/QED/blob/main/CHANGELOG.md#system_0_4_2---) are already implemented and might already be outdated. The merging happend within [system_0_5_0, system_0_5_0(1) & system_0_5_0_1](https://github.com/TEX479/QED/blob/main/CHANGELOG.md#system_0_5_0-system_0_5_01--system_0_5_0_1---). There was much going on, so the merging process will just be skipped for this log. This means that this entry is a change comparision between [system_0_4_3](https://github.com/TEX479/QED/blob/main/CHANGELOG.md#system_0_4_3---) (and [system_0_4_2_k](https://github.com/TEX479/QED/blob/main/CHANGELOG.md#system_0_4_2_k---)) and [system_0_5_1](https://github.com/TEX479/QED/blob/main/CHANGELOG.md#system_0_5_1---)
 ### added
 - `cube()`: function, called in `entschlüsseln()` & `verschlüsseln`. It mapps `text` to an `cube_dimensions`^3 rubics cube in chunks of `cube_field_data_size` and scrables/solves (depending on `encryption`) this cube using the `key_m_cube`
 - `_cube_map_data()`: used to map information to the cubes faces
@@ -150,7 +150,7 @@ This version was created at the same time as `system_0_4_2`. there for it has no
 - `run_test()` now uses random inputs contrary to the previous fixed ones
 
 ## [system_0_4](https://github.com/TEX479/QED/QED_system_0_4.py) [dc-link](https://discord.com/channels/@me/641270189035487232/1080925878638358558) - ???
-- same as 0_3, features didnt work fully, so they are mostly commented out, also had some errors, that where fixed
+- same as [system_0_3](https://github.com/TEX479/QED/blob/main/CHANGELOG.md#system_0_3---), features didnt work fully, so they are mostly commented out, also had some errors, that where fixed
 - [system_0_4_0](https://github.com/TEX479/QED/blob/main/CHANGELOG.md#system_0_4_0---) will contain a full update for the changelog since this will be the major new version
 
 ## [system_0_3_](https://github.com/TEX479/QED/QED_system_0_3_.py) - ???
@@ -161,8 +161,11 @@ This version was created at the same time as `system_0_4_2`. there for it has no
 - fixed inputs for `run_test()`
 
 ## [system_0_3](https://github.com/TEX479/QED/QED_system_0_3.py) - ???
-- just a version previous to 0_3_, features didnt work fully, so they are mostly commented out
-- `system_0_3_` will contain a full update for the changelog since this will be the major new version
+NOTE:
+just a version previous to 0_3_, features didnt work fully, so they are mostly commented out
+`system_0_3_` will contain a full update for the changelog since this will be the major new version
+### added
+- usage of random text & key lengths in `run_test()`
 
 ## [system_0_2](https://github.com/TEX479/QED/QED_system_0_2.py) - ???
 ### fixed
@@ -179,7 +182,6 @@ This version was created at the same time as `system_0_4_2`. there for it has no
 - comment to speed up `structure_m1()`
 
 ## [system_0_1](https://github.com/TEX479/QED/QED_system_0_1.py) - ???
-idk what even happend here. many things got changed, added or removed
 ### fixed
 - multiple bugs
 ### changed
