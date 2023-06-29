@@ -1,4 +1,33 @@
 # Changelog
+
+## GUI_0_4
+### changed
+- `defaultextension`, `filetypes`
+
+## GUI_0_3
+### added
+- `OptionMenu` to set cores 
+
+## GUI_0_2
+### added
+- import `os`, `platform`
+- automatically import the latest `system` version
+
+## GUI_0_1
+### added
+- `IntToBit`, `BitToInt`, `BitToStr`
+- debug
+### removed
+- button to switch between Bits and character
+- key scrolledtext
+- Info box
+### changed
+- `filetypes`
+### fixed
+- multiple bugs
+
+
+
 ## [system_0_6_5](https://github.com/TEX479/QED/blob/main/QED_system_0_6_5.py) 22-23.06.2023
 ### changed
 - minor changes for improvements/deletion of useless stuff
