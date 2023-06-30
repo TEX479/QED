@@ -1,19 +1,19 @@
 # Changelog
 
-## GUI_0_4
+## [GUI_0_4](https://github.com/TEX479/QED/blob/main/QED_GUI_0_4.py)
 ### changed
 - `defaultextension`, `filetypes`
 
-## GUI_0_3
+## [GUI_0_3](https://github.com/TEX479/QED/blob/main/QED_GUI_0_3.py)
 ### added
 - `OptionMenu` to set cores 
 
-## GUI_0_2
+## [GUI_0_2](https://github.com/TEX479/QED/blob/main/QED_GUI_0_2.py)
 ### added
 - import `os`, `platform`
 - automatically import the latest `system` version
 
-## GUI_0_1
+## [GUI_0_1](https://github.com/TEX479/QED/blob/main/QED_GUI_0_1.py)
 ### added
 - `IntToBit`, `BitToInt`, `BitToStr`
 - debug
