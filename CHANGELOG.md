@@ -28,6 +28,10 @@
 
 
 
+## [system_0_6_6](https://github.com/TEX479/QED/blob/main/QED_system_0_6_6.py) 13.07.2023
+### changed
+- some funktions are renamed
+
 ## [system_0_6_5](https://github.com/TEX479/QED/blob/main/QED_system_0_6_5.py) 22-23.06.2023
 ### changed
 - minor changes for improvements/deletion of useless stuff
