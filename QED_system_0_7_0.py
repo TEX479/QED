@@ -278,7 +278,7 @@ class Verschlüsselung():
         way = richtung
         """
         if len(key) == 1: key.insert(0, 2)
-        length = max(key)
+        length = len(key)
         length2 = math.ceil(len(text)/length)
         if way:#ENT
             key_ = [key.index(i+1)+1 for i in range(length)]
