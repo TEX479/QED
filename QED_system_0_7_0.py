@@ -286,9 +286,9 @@ class Verschlüsselung():
 
                 if (i+1)*length >= len(text): # schlüssel für kürzere Textabschnitte anpassen
                     key = key[:len(text) - i*length]
-                    #s2, key = key.copy()[:len(text) - i*length], key[:len(text) - i*length]
-                    #s2.sort()
-                    #for i2 in range(len(s2)): key[key.index(s2[i2])] = i2+1 # kleinste Zahl -> 1, ... | wird nicht mehr benötigt, da sorted()
+                    s2, key = key.copy()[:len(text) - i*length], key[:len(text) - i*length]
+                    s2.sort()
+                    for i2 in range(len(s2)): key[key.index(s2[i2])] = i2+1 # kleinste Zahl -> 1, ...
                     key_ = [key.index(i2+1)+1 for i2 in range(max(key))] # key-ver -> key-ent
 
                 text[i*length:(i+1)*length] = [x for _,x in sorted(zip(key_, text[i*length:(i+1)*length]))]
@@ -331,11 +331,11 @@ class Verschlüsselung():
 
         key_mix_copy = key_mix.copy()
         if last_number != "": key_mix_copy.append(last_number)
-        for i in range(len(key_mix)): key_mix[i] = int(key_mix[i],2) # + 1 | wird nicht mehr benötigt, da sorted()
-        #s2 = key_mix.copy()
-        #s2.sort()
-        #for i in range(len(s2)):# alle Zahel aufeinanderfolgend 1.. bsp. 5 1 3 -> 3 1 2 
-        #    key_mix[key_mix.index(s2[i])] = i+1   | wird nicht mehr benötigt, da sorted()
+        for i in range(len(key_mix)): key_mix[i] = int(key_mix[i],2) + 1
+        s2 = key_mix.copy()
+        s2.sort()
+        for i in range(len(s2)):# alle Zahel aufeinanderfolgend 1.. bsp. 5 1 3 -> 3 1 2 
+            key_mix[key_mix.index(s2[i])] = i+1   
         #for i in range(len(key_mix)):#keine Zahl doppelt? | wird vorher schon überprüft
         #    if key_mix.count(key_mix[i]) != 1:
         #        key_mix.pop(i)
@@ -731,6 +731,7 @@ if __name__ == "__main__":
     #print(N_list)
     x = Verschlüsselung(debug=True, debug_c=False, debug_f=True)
     encrypted = x.verschlüsseln(text="0100100001100101011011000110110001101111001000000101011101101111011100100110110001100100", KEY="10000101010001010011011011010111111001101100101000111100")
+    print("".join(chr(i) for i in BitToInt(x.entschlüsseln(text=encrypted, KEY="10000101010001010011011011010111111001101100101000111100"))))
     
 
 else:
