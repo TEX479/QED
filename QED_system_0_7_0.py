@@ -607,7 +607,7 @@ class Verschlüsselung():
 
         text_scrambled = ""
         for i in text_formatted:
-            text_scrambled += "".join(i2 for i2 in self._mix_letter(text=i, key=key_m_cube_2, way=True))# nur True -> Schlüssel umdrehen
+            text_scrambled += "".join(i2 for i2 in self._mix_letter(text=i, key=key_m_cube_2, way=encryption))# nur True -> Schlüssel umdrehen
         #text_scrambled = text # nur für tests da!
         
         if (len(text_scrambled) >= (20*20*6)) and not(encryption):
