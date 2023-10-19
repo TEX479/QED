@@ -1,2 +1,2 @@
 # QED
-git-repo for a project w/ a friend
+Hier befinden sich alle wichtigen Programm-Dateien im Zusammenhang der Verschlüsselung `QED`. Im [Changelog](Changelog.md) befindet sich eine (grobe) Auflistung aller (verzeichneten) Änderungen zwischen Versionen.
