@@ -676,8 +676,8 @@ class Verschlüsselung():
             pass
 
         def IntToBit(x:int, lenght = 8):
-                return "0"*((math.ceil((len(bin(x))-2)/lenght)*lenght+2)-len(bin(x))) + bin(x)[2:]
-
+                return f"{x:0{lenght}b}"
+        
         def int2anybase(number:int, base:int):
             number_ = []
             while number > 0:

@@ -662,7 +662,7 @@ class Verschlüsselung():
             pass
 
         def IntToBit(x:int, lenght = 8):
-                return "0"*((math.ceil((len(bin(x))-2)/lenght)*lenght+2)-len(bin(x))) + bin(x)[2:]
+                return f"{x:0{lenght}b}"
 
         def int2anybase(number:int, base:int):
             if number != 0:
@@ -676,12 +676,15 @@ class Verschlüsselung():
             return number_
 
         def int2anybase2(number:int, base:float):
-            number_ = []
-            #l_komma = 10**len((str(base).split("."))[1])
-            while number > 0:
-                number_.append(((number*10)%int(base*10))/10)
-                number = (number*10)//int(base*10)
-            number_.reverse()
+            if number != 0:
+                number_ = []
+                #l_komma = 10**len((str(base).split("."))[1])
+                while number > 0:
+                    number_.append(((number*10)%int(base*10))/10)
+                    number = (number*10)//int(base*10)
+                number_.reverse()
+            else:
+                number_ = [0]
             return number_
 
         def anybase2anybase(number_:list, input_base:int, output_base:int):
@@ -689,12 +692,15 @@ class Verschlüsselung():
             for i in range(len(number_)):
                 number += number_[len(number_)-i-1]*input_base**i
 
-            output_number = []
-            while number > 0:
-                output_number.append(number%output_base)
-                number = number//output_base
+            if number != 0:
+                output_number = []
+                while number > 0:
+                    output_number.append(number%output_base)
+                    number = number//output_base
 
-            output_number.reverse()
+                output_number.reverse()
+            else:
+                output_number = [0]
             return output_number
 
 
@@ -772,7 +778,7 @@ if __name__ == "__main__":
     #print(q)
     with open("quick_rotate_20", "w") as f:
         f.write(str(q))"""
-    Y = 0
+    """Y = 0
     N = 0
     N_list = []
     p=[]
@@ -783,18 +789,18 @@ if __name__ == "__main__":
         run_test()
         print(f"\r{i+1}\tvon {r}", end="")
     t = time.time() - t
-    print("\nY:", Y, "|", "N:", N, "|", "D:", t)
-    """cores = 10
+    print("\nY:", Y, "|", "N:", N, "|", "D:", t)"""
+    cores = 10
     anz = 100
-    start = 100
-    stop = 150
-    step = 10
+    start = 1000
+    stop = 1500
+    step = 100
     work = [(anz, start, stop, step) for i in range(cores)]
     with multiprocessing.Pool(cores) as p: 
         data = p.map(run_test_multiprocessing, work)
     for i in range(len(data[0])):
         print(f"Text der länge {data[0][i][0]}\tY: {sum([i2[i][1] for i2 in data])} \t| N: {sum([i2[i][2] for i2 in data])} \t| D: {sum([i2[i][3] for i2 in data])} \t| {sum([i2[i][3] for i2 in data])/(cores*anz)}")
-    """
+    
     #print(N_list)
     #x = Verschlüsselung(debug=True, debug_c=False, debug_f=True)
     #encrypted = x.verschlüsseln(text="0100100001100101011011000110110001101111001000000101011101101111011100100110110001100100", KEY="10000101010001010011011011010111111001101100101000111100")
