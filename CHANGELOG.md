@@ -26,7 +26,42 @@
 ### fixed
 - multiple bugs
 
+## [system_1_1_0_int](https://github.com/TEX479/QED/blob/main/QED_system_1_1_0_int.py) 09.11.2023
+see [system_1_0_0_int](https://github.com/TEX479/QED/blob/main/QED_system_1_0_0_int.py)
 
+## [system_1_1_0](https://github.com/TEX479/QED/blob/main/QED_system_1_1_0.py) 09.11.2023
+### added
+- S-Box-like list in `Verschlüsselung.cube()` called `quick_rotate` for precomputed substitution
+- support for `0` as input for `hilfsfunktionen.int2anybase()`, `hilfsfunktionen.int2anybase2()` and `hilfsfunktionen.anybase2anybase()`
+### changed
+- `hilfsfunktionen.IntToBit()` to only use built-in functions for transformation (and shortened it at the same time)
+
+## [system_1_0_0_int](https://github.com/TEX479/QED/blob/main/QED_system_1_0_0_int.py) 06.11.2023
+Note:\
+The `_int` part of the versionname indicates that the version is using integers as bytes/chunks/whatever. Not strings of bits or arrays of bits.\
+In practice this means that `a = "01100101"` turns into either `a = 0b01100101`, `a = 0x65` or `a = 101`. All calls to functions and returns from those pass along values as integers.
+### added
+- some typehinting
+### changed
+- some wrong typehinting
+
+## [system_1_0_0](https://github.com/TEX479/QED/blob/main/QED_system_1_0_0.py) 06.11.2023
+### added
+- test-function that tests the algorithm using multiprocessing
+### changed
+- for-loop in `Verschlüsselung._VER_1()` -> while-loop
+- other minor stuff...
+
+## [system_0_7_0](https://github.com/TEX479/QED/blob/main/QED_system_0_7_0.py) 04-16.10.2023
+### fixed
+- multiple bugs in `Verschlüsselung.get_key()` as well as in `Verschlüsselung._mix_letter()`
+
+## [system_0_6_7wtf](https://github.com/TEX479/QED/blob/main/QED_system_0_6_7wtf.py) 04.10.2023
+This version exists only because there was a bug where Pythons `try: ...; except: ...` didn't work properly and threw exceptions inside the `try: ...` part. It does not contain any other improovements
+
+## [system_0_6_7](https://github.com/TEX479/QED/blob/main/QED_system_0_6_7.py) 04.10.2023
+### fixed
+- minor bugs in `Verschlüsselung.get_key()`
 
 ## [system_0_6_6](https://github.com/TEX479/QED/blob/main/QED_system_0_6_6.py) 13.07.2023
 ### changed
