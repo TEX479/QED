@@ -98,7 +98,7 @@ class Verschlüsselung():
         if len(S3) == 1: S3 = [int(S[:len(S)//2], 2), int(S[len(S)//2:], 2)]
 
         for i in range(1, len(S3)): key_normal.append(round(S3[i])+1)
-        if len(S3) == 2: key_normal.append(int(S3[1]))
+        if len(S3) == 2: key_normal.append(int(S3[1])+1)
 
         if key_mix>=1: key_mix = int(key_mix%math.ceil(self.l/self.chunk))
         else: key_mix = int(key_mix*math.ceil(self.l/self.chunk))
@@ -140,6 +140,9 @@ class Verschlüsselung():
         key_m_cube = [key_m_cube[i]+key_m_cube[i+1] for i in range(0, len(key_m_cube)//2, 2)]# + %10 ?
         key_m_cube = self.hilfsfunktionen.anybase2anybase(key_m_cube, 9, 10)
 
+        if key_m_cube == 0:
+            print("key_m_cube == 0")
+            exit()
         while len(key_m_cube) < g:
             key_m_cube = int("".join(str(i) for i in key_m_cube))
             key_m_cube = self.hilfsfunktionen.int2anybase2(number=key_m_cube, base=1.7)
@@ -679,20 +682,26 @@ class Verschlüsselung():
                 return f"{x:0{lenght}b}"
         
         def int2anybase(number:int, base:int):
-            number_ = []
-            while number > 0:
-                number_.append(number%base)
-                number = number//base
-            number_.reverse()
+            if number != 0:
+                number_ = []
+                while number > 0:
+                    number_.append(number%base)
+                    number = number//base
+                number_.reverse()
+            else:
+                number_ = [0]
             return number_
 
         def int2anybase2(number:int, base:float):
-            number_ = []
-            #l_komma = 10**len((str(base).split("."))[1])
-            while number > 0:
-                number_.append(((number*10)%int(base*10))/10)
-                number = (number*10)//int(base*10)
-            number_.reverse()
+            if number != 0:
+                number_ = []
+                #l_komma = 10**len((str(base).split("."))[1])
+                while number > 0:
+                    number_.append(((number*10)%int(base*10))/10)
+                    number = (number*10)//int(base*10)
+                number_.reverse()
+            else:
+                number_ = [0]
             return number_
 
         def anybase2anybase(number_:list, input_base:int, output_base:int):
@@ -700,12 +709,15 @@ class Verschlüsselung():
             for i in range(len(number_)):
                 number += number_[len(number_)-i-1]*input_base**i
 
-            output_number = []
-            while number > 0:
-                output_number.append(number%output_base)
-                number = number//output_base
+            if number != 0:
+                output_number = []
+                while number > 0:
+                    output_number.append(number%output_base)
+                    number = number//output_base
 
-            output_number.reverse()
+                output_number.reverse()
+            else:
+                output_number = [0]
             return output_number
 
 
@@ -766,6 +778,7 @@ def run_test_multiprocessing(data):
         t = time.time() - t
         result.append([i, Y, N, t])
         #print("\nY:", Y, "|", "N:", N, "|", "D:", t)
+    print(".")
     return result
 
 
@@ -775,7 +788,7 @@ if __name__ == "__main__":
     N_list = []
     p=[]
     t = time.time()
-    r = 100
+    r = 1000
     print(f"0\tvon {r}", end="")
     for i in range(r):
         run_test()
@@ -794,7 +807,17 @@ if __name__ == "__main__":
         data = p.map(run_test_multiprocessing, work)
     for i in range(len(data[0])):
         print(f"Text der länge {data[0][i][0]}\tY: {sum([i2[i][1] for i2 in data])} \t| N: {sum([i2[i][2] for i2 in data])} \t| D: {sum([i2[i][3] for i2 in data])} \t| {sum([i2[i][3] for i2 in data])/(cores*anz)}")
-    
+    with open("speed_data.txt","w") as f:
+        f.write(__file__)
+        f.write("\n")
+        f.write(",".join(str(i) for i in range(start, stop+1, step)))
+        f.write("\n")
+        w = []
+        for i in range(len(data[0])):
+            w.append(str(sum([i2[i][3] for i2 in data])/(cores*anz)))
+        f.write(",".join(i for i in w))
+
+
     #print(N_list)
     #x = Verschlüsselung(debug=True, debug_c=False, debug_f=True)
     #encrypted = x.verschlüsseln(text="0100100001100101011011000110110001101111001000000101011101101111011100100110110001100100", KEY="10000101010001010011011011010111111001101100101000111100")
