@@ -724,7 +724,7 @@ class Verschlüsselung():
 
 
 
-def run_test():
+def run_test(l1):
     global Y
     global N
     #print("new process")
@@ -734,9 +734,9 @@ def run_test():
 
     test = ""
     key = ""
-    l1 = 1600#randint(10, 1600)
-    l2 = 100#randint(20, 100)
-    for i in range(l1*4): test += str(randint(0, 1))
+    #l1 = 1600#randint(10, 1600)
+    l2 = 128#randint(20, 100)
+    for i in range(l1*8): test += str(randint(0, 1))
     for i in range(l2): key += str(randint(0, 1))
     #test = "".join(x.hilfsfunktionen.IntToBit(ord(i)) for i in "Hello World.")
     #key = "0000000110100100000100010100101110010001100001001011111001010010010010111001001111111011110000010101"
@@ -746,9 +746,10 @@ def run_test():
     decrypted = x.entschlüsseln(encrypted, key)
     if test == decrypted:
         Y+=1
-    else: N+=1; N_list.append((test, key))
+    else: N+=1#; N_list.append((test, key))
 
 def run_test_multiprocessing(data):
+    print("+")
     r, von, bis, s = data[0], data[1], data[2], data[3]
     #print("new process")
     debug = False
@@ -757,7 +758,7 @@ def run_test_multiprocessing(data):
     result = []
     
     #l1 = 1600#randint(10, 1600)
-    l2 = 100#randint(20, 100)
+    l2 = 128#randint(20, 100)
     
     for i in range(von, bis+1, s):
         Y = 0
@@ -778,51 +779,67 @@ def run_test_multiprocessing(data):
         t = time.time() - t
         result.append([i, Y, N, t])
         #print("\nY:", Y, "|", "N:", N, "|", "D:", t)
-    print(".")
+    print("-")
     return result
 
 
 if __name__ == "__main__":
-    """Y = 0
-    N = 0
-    N_list = []
-    p=[]
-    t = time.time()
-    r = 1000
-    print(f"0\tvon {r}", end="")
-    for i in range(r):
-        run_test()
-        print(f"\r{i+1}\tvon {r}", end="")
-    t = time.time() - t
-    print("\nY:", Y, "|", "N:", N, "|", "D:", t)
-    #print(N_list[0][0], "\n", N_list[0][1])"""
+    if 1:
+        Y = 0
+        N = 0
+        N_list = []
+        data = []
+        start = 200
+        stop = 2000
+        step = 100
+        #p=[]
 
-    cores = 10
-    anz = 100
-    start = 1000
-    stop = 1500
-    step = 100
-    work = [(anz, start, stop, step) for i in range(cores)]
-    with multiprocessing.Pool(cores) as p: 
-        data = p.map(run_test_multiprocessing, work)
-    for i in range(len(data[0])):
-        print(f"Text der länge {data[0][i][0]}\tY: {sum([i2[i][1] for i2 in data])} \t| N: {sum([i2[i][2] for i2 in data])} \t| D: {sum([i2[i][3] for i2 in data])} \t| {sum([i2[i][3] for i2 in data])/(cores*anz)}")
-    with open("speed_data.txt","w") as f:
-        f.write(__file__)
-        f.write("\n")
-        f.write(",".join(str(i) for i in range(start, stop+1, step)))
-        f.write("\n")
-        w = []
+        for l1 in range(start, stop+1, step):
+            t = time.time()
+            r = 1000
+            print(f"0\tvon {r}", end="")
+            for i in range(r):
+                run_test(l1)
+                print(f"\r{i+1}\tvon {r}", end="")
+            t = time.time() - t
+            print("\nY:", Y, "|", "N:", N, "|", "D:", t)
+            data.append(t/r)
+        with open("speed_data.txt","w") as f:
+            f.write(__file__)
+            f.write("\n")
+            f.write(",".join(str(i) for i in range(start, stop+1, step)))
+            f.write("\n")
+            f.write(",".join(str(i) for i in data))
+        #print(N_list[0][0], "\n", N_list[0][1])
+
+    elif 0:
+        cores = 15
+        anz = 50
+        start = 200
+        stop = 2000
+        step = 100
+        work = [(anz, start, stop, step) for i in range(cores)]
+        print("begin\n")
+        with multiprocessing.Pool(cores) as p: 
+            data = p.map(run_test_multiprocessing, work)
         for i in range(len(data[0])):
-            w.append(str(sum([i2[i][3] for i2 in data])/(cores*anz)))
-        f.write(",".join(i for i in w))
+            print(f"Text der länge {data[0][i][0]} Bytes\tY: {sum([i2[i][1] for i2 in data])} \t| N: {sum([i2[i][2] for i2 in data])} \t| D: {sum([i2[i][3] for i2 in data])} \t| {sum([i2[i][3] for i2 in data])/(cores*anz)}")
+        print("end\n")
+        with open("speed_data.txt","w") as f:
+            f.write(__file__)
+            f.write("\n")
+            f.write(",".join(str(i) for i in range(start, stop+1, step)))
+            f.write("\n")
+            w = []
+            for i in range(len(data[0])):
+                w.append(str(sum([i2[i][3] for i2 in data])/(cores*anz)))
+            f.write(",".join(i for i in w))
 
+    elif 0:
+        x = Verschlüsselung(debug=True, debug_c=False, debug_f=True)
+        encrypted = x.verschlüsseln(text="0100100001100101011011000110110001101111001000000101011101101111011100100110110001100100", KEY="10000101010001010011011011010111111001101100101000111100")
+        print("".join(chr(i) for i in BitToInt(x.entschlüsseln(text=encrypted, KEY="10000101010001010011011011010111111001101100101000111100"))))
 
-    #print(N_list)
-    #x = Verschlüsselung(debug=True, debug_c=False, debug_f=True)
-    #encrypted = x.verschlüsseln(text="0100100001100101011011000110110001101111001000000101011101101111011100100110110001100100", KEY="10000101010001010011011011010111111001101100101000111100")
-    #print("".join(chr(i) for i in BitToInt(x.entschlüsseln(text=encrypted, KEY="10000101010001010011011011010111111001101100101000111100"))))
-    
 
 else:
     #print("erfolgreich Importiert: QED_system")
