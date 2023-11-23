@@ -225,7 +225,7 @@ This version was created at the same time as `system_0_4_2`. there for it has no
 ### changed
 - `run_test()` now uses random inputs contrary to the previous fixed ones
 
-## [system_0_4](https://github.com/TEX479/QED/QED_system_0_4.py) [dc-link](https://discord.com/channels/@me/641270189035487232/1080925878638358558) - ???
+## [system_0_4](https://github.com/TEX479/QED/QED_system_0_4.py) [dc-link](https://discord.com/channels/@me/641270189035487232/1080925878638358558) - 03.02.2023
 NOTE:
 same as [system_0_3](https://github.com/TEX479/QED/blob/main/CHANGELOG.md#system_0_3---), features didnt work fully, so they are mostly commented out, also had some errors, that where fixed
 [system_0_4_0](https://github.com/TEX479/QED/blob/main/CHANGELOG.md#system_0_4_0---) will contain a full update for the changelog since this will be the major new version
@@ -273,3 +273,5 @@ just a version previous to 0_3_, features didnt work fully, so they are mostly c
 
 ## [system_0](https://github.com/TEX479/QED/QED_system_0.py) - ???
 - started using the system/gui seperation bc it's just better
+
+<!-- beginn irgendwann 2022 -->
