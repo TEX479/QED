@@ -125,14 +125,14 @@ class Verschlüsselung():
         key_m_cube = ""
         if sum(key_normal) > key_start:
             while key_start > 0:
-                if key_start - key_normal[0] > 0:
+                if key_start > key_normal[0]:
                     key_start -= key_normal[0]
                     key_normal.pop(0)
                 else:
                     key_normal[0] -= key_start
                     key_start = 0
         else:
-            pass#???
+            pass
 
         key_m_cube = int("".join(str(i) for i in key_normal))
         #umwandeln in andere Systeme
@@ -742,11 +742,14 @@ def run_test(l1):
     #key = "0000000110100100000100010100101110010001100001001011111001010010010010111001001111111011110000010101"
     
     #if debug: print(test)
+    t = time.time()
     encrypted = x.verschlüsseln(text=test, KEY=key)
     decrypted = x.entschlüsseln(encrypted, key)
+    t = time.time() - t
     if test == decrypted:
         Y+=1
     else: N+=1#; N_list.append((test, key))
+    return t
 
 def run_test_multiprocessing(data):
     print("+")
@@ -789,19 +792,20 @@ if __name__ == "__main__":
         N = 0
         N_list = []
         data = []
-        start = 200
-        stop = 2000
-        step = 100
+        print("Ein-Kern-Test")
+        start = int(input("start (in bytes): "))#200
+        stop = int(input("stop (in bytes): "))#2000
+        step = int(input("step (in bytes): "))#100
         #p=[]
 
         for l1 in range(start, stop+1, step):
-            t = time.time()
+            t = 0#t = time.time()
             r = 1000
             print(f"0\tvon {r}", end="")
             for i in range(r):
-                run_test(l1)
+                t += run_test(l1)
                 print(f"\r{i+1}\tvon {r}", end="")
-            t = time.time() - t
+            #t = time.time() - t
             print("\nY:", Y, "|", "N:", N, "|", "D:", t)
             data.append(t/r)
         with open("speed_data.txt","w") as f:
