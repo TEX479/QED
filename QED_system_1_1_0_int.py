@@ -796,17 +796,18 @@ if __name__ == "__main__":
         start = int(input("start (in bytes): "))#200
         stop = int(input("stop (in bytes): "))#2000
         step = int(input("step (in bytes): "))#100
+        r = int(input("Anzahl wiederholungen: "))
         #p=[]
 
         for l1 in range(start, stop+1, step):
             t = 0#t = time.time()
-            r = 1000
             print(f"0\tvon {r}", end="")
             for i in range(r):
                 t += run_test(l1)
                 print(f"\r{i+1}\tvon {r}", end="")
             #t = time.time() - t
             print("\nY:", Y, "|", "N:", N, "|", "D:", t)
+            Y, N = 0, 0
             data.append(t/r)
         with open("speed_data.txt","w") as f:
             f.write(__file__)
