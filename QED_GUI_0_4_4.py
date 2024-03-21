@@ -7,6 +7,7 @@ from PIL import ImageTk as PILImageTk
 import os
 import platform
 import time
+from random import randint
 
 
 def IntToBit(x:int, lenght = 8) -> str:
@@ -107,7 +108,7 @@ class GUI():
 
         '''KEY-GEN'''
         #len
-        self.keygen_len_lbl = tkinter.Label(master=self.keygen_btns, background = "#ffffff", fg="#000000", text="KEY-gen-length:")
+        self.keygen_len_lbl = tkinter.Label(master=self.keygen_btns, background = "#ffffff", fg="#000000", text="KEY-gen-length(byte):")
         self.keygen_len_lbl.grid(row=0, column=0, padx=5, pady=5, sticky="nw")
         self.keygen_len_entry = tkinter.Entry(self.keygen_btns, background = "#ffffff", fg="#000000")
         self.keygen_len_entry.grid(row=1, column=0, padx=5, pady=5, sticky="nw")
@@ -192,7 +193,7 @@ class GUI():
             self.TEXT_o_lbl_p.configure(text=str(self.texts["p"]))
 
     def save_key(self):
-        key = Verschlüsselung.generate_key(int(self.keygen_len_entry.get()))
+        key = IntToBit(randint(1,2**(8*int(self.keygen_len_entry.get()))))
         filepath = save_file(key, return_path=True)
         self.KEY[0] = key
         self.KEY[1] = filepath
