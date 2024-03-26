@@ -787,7 +787,7 @@ if __name__ == "__main__":
     elif 0:
         x = Verschlüsselung(debug=True, debug_c=False, debug_f=True)
         encrypted = x.verschlüsseln(text="0100100001100101011011000110110001101111001000000101011101101111011100100110110001100100", KEY="10000101010001010011011011010111111001101100101000111100")
-        print("".join(chr(i) for i in BitToInt(x.entschlüsseln(text=encrypted, KEY="10000101010001010011011011010111111001101100101000111100"))))
+        print("".join(chr(i) for i in hilfsfunktionen.BitToInt(x.entschlüsseln(text=encrypted, KEY="10000101010001010011011011010111111001101100101000111100"))))
 
 
 else:
