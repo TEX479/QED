@@ -4,14 +4,6 @@ import time
 import multiprocessing
 import QED_hilfsfunktionen as hilfsfunktionen
 
-def BitToInt(s:str, anz_bit= 8) -> list[int]:
-        r= []
-        for i in range(len(s)//anz_bit):
-            r.append(int(s[i*anz_bit:(i+1)*anz_bit], 2))
-        if len(s)%anz_bit != 0:
-            r.append(int(s[(len(s)//anz_bit)*anz_bit:], 2))
-        return r
-
 
 class Verschlüsselung():
     def __init__(self, chunk = 16, debug = True, cube_field_data_size = 1, debug_c=False, debug_f=False) -> None:
@@ -171,14 +163,14 @@ class Verschlüsselung():
         if self.debug: print(f"original:\t {text:0{self.l}b} \nLänge: {self.l}\n")
         if self.debug_f: 
             with open("ENT_0_original.txt", "wb") as f:
-                f.write(bytes(BitToInt(f"{text:0{self.l}b}")))
+                f.write(bytes(hilfsfunktionen.BitToInt(f"{text:0{self.l}b}")))
 
 
         text = self.mix_letter(way=True,full_text_=text, key=keys["m"])
         if self.debug: print(f"nach mix_letter:\t {text:0{self.l}b} \nLänge: {self.l}\n")
         if self.debug_f: 
             with open("ENT_1_nach_mix_letter.txt", "wb") as f:
-                f.write(bytes(BitToInt(f"{text:0{self.l}b}")))
+                f.write(bytes(hilfsfunktionen.BitToInt(f"{text:0{self.l}b}")))
 
         l2 = keys["s"]*self.chunk
         text_part = f"{text:0{self.l}b}"[:l2]
@@ -190,21 +182,21 @@ class Verschlüsselung():
         if self.debug: print(f"nach erw1:\t {text:0{self.l}b} \nLänge: {self.l}\n")
         if self.debug_f: 
             with open("ENT_2_nach_m1_2.txt", "wb") as f:
-                f.write(bytes(BitToInt(f"{text:0{self.l}b}")))
+                f.write(bytes(hilfsfunktionen.BitToInt(f"{text:0{self.l}b}")))
 
 
         text = self.cube(text=text, key_m_cube=keys["c"], encryption=not(True))
         if self.debug: print(f"nach cube:\t {text:0{self.l}b} \nLänge: {self.l}\n")
         if self.debug_f: 
             with open("ENT_3_nach_cube.txt", "wb") as f:
-                f.write(bytes(BitToInt(f"{text:0{self.l}b}")))
+                f.write(bytes(hilfsfunktionen.BitToInt(f"{text:0{self.l}b}")))
 
 
         text = self.VER_1(way=True, text=text, key=keys["n"].copy(), l2=self.l)
         if self.debug: print(f"nach m1:\t {text:0{self.l}b} \nLänge: {self.l}\n")
         if self.debug_f: 
             with open("ENT_4_nach_m1.txt", "wb") as f:
-                f.write(bytes(BitToInt(f"{text:0{self.l}b}")))
+                f.write(bytes(hilfsfunktionen.BitToInt(f"{text:0{self.l}b}")))
 
         return f"{text:0{self.l}b}"
 
@@ -222,20 +214,20 @@ class Verschlüsselung():
         if self.debug: print(f"original:\t {text:0{self.l}b} \nLänge: {self.l}\n")
         if self.debug_f: 
             with open("ENT_0_original.txt", "wb") as f:
-                f.write(bytes(BitToInt(f"{text:0{self.l}b}")))
+                f.write(bytes(hilfsfunktionen.BitToInt(f"{text:0{self.l}b}")))
 
         text = self.VER_1(way=False, text=text, key=keys["n"].copy(), l2=self.l)
         if self.debug: print(f"nach m1:\t {text:0{self.l}b} \nLänge: {self.l}\n")
         if self.debug_f: 
             with open("ENT_4_nach_m1.txt", "wb") as f:
-                f.write(bytes(BitToInt(f"{text:0{self.l}b}")))
+                f.write(bytes(hilfsfunktionen.BitToInt(f"{text:0{self.l}b}")))
 
 
         text = self.cube(text=text, key_m_cube=keys["c"], encryption=not(False))
         if self.debug: print(f"nach cube:\t {text:0{self.l}b} \nLänge: {self.l}\n")
         if self.debug_f: 
             with open("ENT_3_nach_cube.txt", "wb") as f:
-                f.write(bytes(BitToInt(f"{text:0{self.l}b}")))
+                f.write(bytes(hilfsfunktionen.BitToInt(f"{text:0{self.l}b}")))
 
 
         l2 = keys["s"]*self.chunk
@@ -248,14 +240,14 @@ class Verschlüsselung():
         if self.debug: print(f"nach erw1:\t {text:0{self.l}b} \nLänge: {self.l}\n")
         if self.debug_f: 
             with open("ENT_2_nach_m1_2.txt", "wb") as f:
-                f.write(bytes(BitToInt(f"{text:0{self.l}b}")))
+                f.write(bytes(hilfsfunktionen.BitToInt(f"{text:0{self.l}b}")))
 
 
         text = self.mix_letter(way=False,full_text_=text, key=keys["m"])
         if self.debug: print(f"nach mix_letter:\t {text:0{self.l}b} \nLänge: {self.l}\n")
         if self.debug_f: 
             with open("ENT_1_nach_mix_letter.txt", "wb") as f:
-                f.write(bytes(BitToInt(f"{text:0{self.l}b}")))
+                f.write(bytes(hilfsfunktionen.BitToInt(f"{text:0{self.l}b}")))
 
         return f"{text:0{self.l}b}"
 

@@ -2,6 +2,14 @@
 def IntToBit(x:int, lenght = 8):
         return f"{x:0{lenght}b}"
 
+def BitToInt(s:str, anz_bit= 8):
+        r= []
+        for i in range(len(s)//anz_bit):
+            r.append(int(s[i*anz_bit:(i+1)*anz_bit], 2))
+        if len(s)%anz_bit != 0:
+            r.append(int(s[(len(s)//anz_bit)*anz_bit:], 2))
+        return r
+
 def int2anybase(number:int, base:int):
     if number != 0:
         number_ = []

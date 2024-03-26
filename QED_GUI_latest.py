@@ -8,19 +8,8 @@ import os
 import platform
 import time
 from QED_system_latest import Verschlüsselung
+import QED_hilfsfunktionen as hilfsfunktionen
 from random import randint
-
-
-def IntToBit(x:int, lenght = 8) -> str:
-        return "0"*((math.ceil((len(bin(x))-2)/lenght)*lenght+2)-len(bin(x))) + bin(x)[2:]
-
-def BitToInt(s:str, anz_bit= 8):
-        r= []
-        for i in range(len(s)//anz_bit):
-            r.append(int(s[i*anz_bit:(i+1)*anz_bit], 2))
-        if len(s)%anz_bit != 0:
-            r.append(int(s[(len(s)//anz_bit)*anz_bit:], 2))
-        return r
 
 
 def save_file(text, return_path:bool = False):
@@ -32,7 +21,7 @@ def save_file(text, return_path:bool = False):
         )
     if not filepath:
         return
-    content = bytes(BitToInt(text))
+    content = bytes(hilfsfunktionen.BitToInt(text))
     with open(filepath, "wb") as f:
         f.write(content)
     if return_path: return filepath
@@ -50,7 +39,7 @@ def open_file():
         for i in content:
             content_arr.append(i)
         #print(content_arr)
-        text = "".join(IntToBit(i) for i in content_arr)
+        text = "".join(hilfsfunktionen.IntToBit(i) for i in content_arr)
         return text, filepath
 
 
@@ -159,18 +148,18 @@ class GUI():
             self.texts["e"] = v.entschlüsseln(text = self.texts["o"], KEY = self.KEY[0])
             duration = time.time() - duration
             if self.debug: print("duration: ", duration)
-            if self.debug: print("V: ", bytes(BitToInt(self.texts["v"])), "\n\n", "E:", bytes(BitToInt(self.texts["e"])))
+            if self.debug: print("V: ", bytes(hilfsfunktionen.BitToInt(self.texts["v"])), "\n\n", "E:", bytes(hilfsfunktionen.BitToInt(self.texts["e"])))
 
             #self.texts["v2"] = BitToStr(self.texts["v"])
             #self.texts["e2"] = BitToStr(self.texts["e"])
             self.TEXT_v_sct.configure(state="normal")
             self.TEXT_v_sct.delete("1.0", tkinter.END)
-            self.TEXT_v_sct.insert(tkinter.INSERT, "".join([chr(i) for i in BitToInt(self.texts["v"])]))
+            self.TEXT_v_sct.insert(tkinter.INSERT, "".join([chr(i) for i in hilfsfunktionen.BitToInt(self.texts["v"])]))
             self.TEXT_v_sct.configure(state="disabled")
 
             self.TEXT_e_sct.configure(state="normal")
             self.TEXT_e_sct.delete("1.0", tkinter.END)
-            self.TEXT_e_sct.insert(tkinter.INSERT, "".join([chr(i) for i in BitToInt(self.texts["e"])]))
+            self.TEXT_e_sct.insert(tkinter.INSERT, "".join([chr(i) for i in hilfsfunktionen.BitToInt(self.texts["e"])]))
             self.TEXT_e_sct.configure(state="disabled")
             if self.debug: print("fertig")
 
@@ -187,12 +176,12 @@ class GUI():
             if self.debug: print("Original Text:",self.texts["o"])
             self.TEXT_o_sct.configure(state="normal")
             self.TEXT_o_sct.delete("1.0", tkinter.END)
-            self.TEXT_o_sct.insert(tkinter.INSERT, "".join([chr(i) for i in BitToInt(self.texts["o"])]))
+            self.TEXT_o_sct.insert(tkinter.INSERT, "".join([chr(i) for i in hilfsfunktionen.BitToInt(self.texts["o"])]))
             self.TEXT_o_sct.configure(state="disabled")
             self.TEXT_o_lbl_p.configure(text=str(self.texts["p"]))
 
     def save_key(self):
-        key = IntToBit(randint(1,2**(8*int(self.keygen_len_entry.get()))))
+        key = hilfsfunktionen.IntToBit(randint(1,2**(8*int(self.keygen_len_entry.get()))))
         filepath = save_file(key, return_path=True)
         self.KEY[0] = key
         self.KEY[1] = filepath
@@ -214,14 +203,14 @@ class GUI():
             self.texts["o"] = self.texts["v"]
             self.TEXT_o_sct.configure(state="normal")
             self.TEXT_o_sct.delete("1.0", tkinter.END)
-            self.TEXT_o_sct.insert(tkinter.INSERT, "".join([chr(i) for i in BitToInt(self.texts["o"])]))
+            self.TEXT_o_sct.insert(tkinter.INSERT, "".join([chr(i) for i in hilfsfunktionen.BitToInt(self.texts["o"])]))
             self.TEXT_o_sct.configure(state="disabled")
             self.start()
         elif what == "e":
             self.texts["o"] = self.texts["e"]
             self.TEXT_o_sct.configure(state="normal")
             self.TEXT_o_sct.delete("1.0", tkinter.END)
-            self.TEXT_o_sct.insert(tkinter.INSERT, "".join([chr(i) for i in BitToInt(self.texts["o"])]))
+            self.TEXT_o_sct.insert(tkinter.INSERT, "".join([chr(i) for i in hilfsfunktionen.BitToInt(self.texts["o"])]))
             self.TEXT_o_sct.configure(state="disabled")
             self.start()
 
