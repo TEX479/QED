@@ -3,5 +3,6 @@
 Hier befinden sich alle wichtigen Programm-Dateien im Zusammenhang der Verschlüsselung `QED`. Im [Changelog](CHANGELOG.md) befindet sich eine (grobe) Auflistung aller (verzeichneten) Änderungen zwischen Versionen.\
 Die älteren Versionen befinden sich im ordner [archiv](https://github.com/TEX479/QED/archiv).
 
-##### Notiz:
-Die Links in [Changelog.md](CHANGELOG.md) sind noch nicht geupdated. Dies geschieht bei nächster Gelegenheit.
+##### Hinweis:
+Die Links in [Changelog.md](CHANGELOG.md) sind noch nicht geupdated. Dies geschieht bei nächster Gelegenheit.\
+Aufgrund einiger Bugs wird weiterhin an QED gearbeitet. Um das Dateienchaos zu mildern wird im Branch ["latest"](https://github.com/TEX479/QED/tree/latest) gearbeitet. Sollte das Projekt zu einem Schluss kommen, wird dieser Branch archiviert und [latest](https://github.com/TEX479/QED/tree/latest) wird zum neuen [main](https://github.com/TEX479/QED/tree/main)-Branch. (So bleiben die alten Versionen erhalten, während man beim download nur das fertige Programm erhält)
