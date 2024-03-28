@@ -1,50 +1,50 @@
 
-def IntToBit(x:int, lenght = 8):
-        return f"{x:0{lenght}b}"
+def IntToBit(x:int, lenght = 8) -> str:
+    return f"{x:0{lenght}b}"
 
-def BitToInt(s:str, anz_bit= 8):
-        r= []
-        for i in range(len(s)//anz_bit):
-            r.append(int(s[i*anz_bit:(i+1)*anz_bit], 2))
-        if len(s)%anz_bit != 0:
-            r.append(int(s[(len(s)//anz_bit)*anz_bit:], 2))
-        return r
+def BitToInt(s:str, anz_bit= 8) -> list[int]:
+    s = s + ("0" * (anz_bit - (len(s) % anz_bit)))
+    r= []
+    for i in range(len(s)//anz_bit):
+        r.append(int(s[i*anz_bit:(i+1)*anz_bit], 2))
+    return r
 
-def int2anybase(number:int, base:int):
-    if number != 0:
-        number_ = []
-        while number > 0:
-            number_.append(number%base)
-            number = number//base
-        number_.reverse()
-    else:
-        number_ = [0]
-    return number_
+def int2anybase(input_number:int, base:int) -> list[int]:
+    if input_number == 0:
+        return [0]
+    
+    output_number = []
+    while input_number > 0:
+        output_number.append(input_number%base)
+        input_number = input_number//base
+    output_number.reverse()
 
-def int2anybase2(number:int, base:float):
-    if number != 0:
-        number_ = []
-        #l_komma = 10**len((str(base).split("."))[1])
-        while number > 0:
-            number_.append(((number*10)%int(base*10))/10)
-            number = (number*10)//int(base*10)
-        number_.reverse()
-    else:
-        number_ = [0]
-    return number_
+    return output_number
 
-def anybase2anybase(number_:list, input_base:int, output_base:int):
-    number = 0
-    for i in range(len(number_)):
-        number += number_[len(number_)-i-1]*input_base**i
+def int2anybase2(input_number:int, base:float) -> list[float]:
+    if input_number == 0:
+        return [0]
 
-    if number != 0:
-        output_number = []
-        while number > 0:
-            output_number.append(number%output_base)
-            number = number//output_base
+    output_number = []
+    while input_number > 0:
+        output_number.append(((input_number*10)%int(base*10))/10)
+        input_number = (input_number*10)//int(base*10)
+    output_number.reverse()
 
-        output_number.reverse()
-    else:
-        output_number = [0]
+    return output_number
+
+def anybase2anybase(input_number:list, input_base:int, output_base:int) -> list[int]:
+    processing_nuber = 0
+    for i in range(len(input_number)):
+        processing_nuber += input_number[len(input_number)-i-1]*input_base**i
+
+    if processing_nuber == 0:
+        return [0]
+
+    output_number = []
+    while processing_nuber > 0:
+        output_number.append(processing_nuber%output_base)
+        processing_nuber = processing_nuber//output_base
+    output_number.reverse()
+    
     return output_number

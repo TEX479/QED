@@ -129,7 +129,7 @@ class Verschlüsselung():
 
         key_m_cube = int("".join(str(i) for i in key_normal))
         #umwandeln in andere Systeme
-        key_m_cube = hilfsfunktionen.int2anybase(number=key_m_cube,base=5)
+        key_m_cube = hilfsfunktionen.int2anybase(input_number=key_m_cube,base=5)
         key_m_cube = [key_m_cube[i]+key_m_cube[i+1] for i in range(0, len(key_m_cube)//2, 2)]# + %10 ?
         key_m_cube = hilfsfunktionen.anybase2anybase(key_m_cube, 9, 10)
 
@@ -138,11 +138,11 @@ class Verschlüsselung():
             exit()
         while len(key_m_cube) < g:
             key_m_cube = int("".join(str(i) for i in key_m_cube))
-            key_m_cube = hilfsfunktionen.int2anybase2(number=key_m_cube, base=1.7)
+            key_m_cube = hilfsfunktionen.int2anybase2(input_number=key_m_cube, base=1.7)
             key_m_cube = "".join(str(i*10).split(".")[0] for i in key_m_cube)
             key_m_cube = [int(i) for i in key_m_cube]
         while len(key_m_cube) > g*1.75:
-            key_m_cube = hilfsfunktionen.anybase2anybase(number_=key_m_cube, input_base=10, output_base=5)# 5 -> ?
+            key_m_cube = hilfsfunktionen.anybase2anybase(input_number=key_m_cube, input_base=10, output_base=5)# 5 -> ?
             key_m_cube = [key_m_cube[i]+key_m_cube[i+1] for i in range(0, len(key_m_cube)//2, 2)]# + %10 ?
             key_m_cube = hilfsfunktionen.anybase2anybase(key_m_cube, 9, 10)
         key_m_cube = int("".join(str(i) for i in key_m_cube))
