@@ -46,7 +46,6 @@ class GUI():
         self.debug = debug
         
         self.create_gui(version_index="die funktionierende Version™", gui_version="nicht schön aber hässlich")
-        #way : True -> Ent; False -> Ver
 
     def create_gui(self, version_index, gui_version):
         self.main_window = tkinter.Tk()
@@ -146,8 +145,6 @@ class GUI():
             if self.debug: print("V: ", bytes(hilfsfunktionen.BitToInt(self.texts["v"])), "\n\nE: ", bytes(hilfsfunktionen.BitToInt(self.texts["e"])))
             if self.debug: print(f"len(V): {len(bytes(hilfsfunktionen.BitToInt(self.texts['v'])))}\nlen(E): {len(bytes(hilfsfunktionen.BitToInt(self.texts['e'])))}")
 
-            #self.texts["v2"] = BitToStr(self.texts["v"])
-            #self.texts["e2"] = BitToStr(self.texts["e"])
             self.TEXT_v_sct.configure(state="normal")
             self.TEXT_v_sct.delete("1.0", tkinter.END)
             self.TEXT_v_sct.insert(tkinter.INSERT, "".join([chr(i) for i in hilfsfunktionen.BitToInt(self.texts["v"])]))
