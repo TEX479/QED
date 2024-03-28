@@ -138,12 +138,13 @@ class GUI():
         if (self.texts["o"] != "") and (self.KEY[0] != ""):
             if self.debug: print("Verarbeiten...")
             duration = time.time()
-            v = Verschlüsselung(chunk = self.chunk, debug = False)
+            v = Verschlüsselung(chunk = self.chunk, debug = True)
             self.texts["v"] = v.verschlüsseln(text = self.texts["o"], KEY = self.KEY[0])
             self.texts["e"] = v.entschlüsseln(text = self.texts["o"], KEY = self.KEY[0])
             duration = time.time() - duration
             if self.debug: print("duration: ", duration)
-            if self.debug: print("V: ", bytes(hilfsfunktionen.BitToInt(self.texts["v"])), "\n\n", "E:", bytes(hilfsfunktionen.BitToInt(self.texts["e"])))
+            if self.debug: print("V: ", bytes(hilfsfunktionen.BitToInt(self.texts["v"])), "\n\nE: ", bytes(hilfsfunktionen.BitToInt(self.texts["e"])))
+            if self.debug: print(f"len(V): {len(bytes(hilfsfunktionen.BitToInt(self.texts['v'])))}\nlen(E): {len(bytes(hilfsfunktionen.BitToInt(self.texts['e'])))}")
 
             #self.texts["v2"] = BitToStr(self.texts["v"])
             #self.texts["e2"] = BitToStr(self.texts["e"])
@@ -213,29 +214,4 @@ if __name__ == "__main__":
     g = GUI(debug=True)
 
 
-"""
-test = open_file()
-print(test[0])
-save_file(test[0])
-"""
-"""
-xor bit:
-
-x = "10101010"
-y = "01010101"
-z = bin(int(x,2)^int(y,2))[2:]
-
-
-with open(<name>, "rb") as f:
-    test_content = f.read()
-
-test_content_arr = []
-for i in test_content:
-    test_content_arr.append(i)
-print(test_content_arr)
-
-test2_content = bytes(test_content_arr)
-with open(<name>, "wb") as f:
-    f.write(test2_content)
-"""
 class fehler(ValueError): ...

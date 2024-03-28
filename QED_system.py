@@ -793,5 +793,3 @@ if __name__ == "__main__":
 else:
     #print("erfolgreich Importiert: QED_system")
     pass
-# just for fun
-class fehler(ValueError): ...
