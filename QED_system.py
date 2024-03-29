@@ -251,7 +251,6 @@ class Verschlüsselung():
 
         return f"{text:0{self.l}b}"
 
-
     def _VER_1(self, text:list, key:list, part:int, pos:int) -> int:
         """
         xor der Bits von part mit den von text nach key
@@ -366,7 +365,7 @@ class Verschlüsselung():
         if self.debug: print("text: ",full_text,"#")
         return int("".join(f"{i:0{chunk}b}" for i in full_text),2)
 
-    def VER_1(self, way, text:int, key:list, l2) -> int:
+    def VER_1(self, way:bool, text:int, key:list, l2:int) -> int:
         """
         struktur zum ver- und entschlüsseln der Methode 1
         """
