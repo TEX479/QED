@@ -1,5 +1,5 @@
 
-def IntToBit(x:int, lenght = 8) -> str:
+def IntToBit(x:int, lenght= 8) -> str:
     return f"{x:0{lenght}b}"
 
 def BitToInt(s:str, anz_bit= 8) -> list[int]:

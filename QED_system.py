@@ -6,7 +6,7 @@ import QED_hilfsfunktionen as hilfsfunktionen
 
 
 class Verschlüsselung():
-    def __init__(self, chunk = 16, debug = True, cube_field_data_size = 1, debug_c=False, debug_f=False) -> None:
+    def __init__(self, chunk:int= 16, debug:bool= True, cube_field_data_size:int= 1, debug_c:bool= False, debug_f:bool= False) -> None:
         """
         debug_c -> debug für cube class
         debug   -> debug alles andere
@@ -20,7 +20,7 @@ class Verschlüsselung():
         self.debug_c = debug_c
         self.debug_f = debug_f
 
-    def get_key(self, KEY:str):
+    def get_key(self, KEY:str) -> dict[str, list|int]:
         """
         erzeugt aus KEY(str aus 0/1) und text(int)
         -> key_start:int; key_m_cube:int; key_normal:list; key_mix:int
@@ -108,7 +108,7 @@ class Verschlüsselung():
         if self.debug: print("key_normal: ", key_normal, "\nstart: ", key_start, "\nmix: ", key_mix, "\nm_cube: ", key_m_cube, "\n")
         return {"n":key_normal, "s":key_start, "m":key_mix, "c":key_m_cube}
 
-    def get_key_m_cube(self, key_normal:list, key_start:int, g=250) -> int:
+    def get_key_m_cube(self, key_normal:list, key_start:int, g:int= 250) -> int:
         """
         erzeugt aus key_normal und key_start
         -> key_m_cube
@@ -149,7 +149,7 @@ class Verschlüsselung():
 
         return key_m_cube
 
-    def entschlüsseln(self, text, KEY: str) -> str:
+    def entschlüsseln(self, text:str, KEY: str) -> str:
         """
         entschlüsselt den Text mit KEY
         -> text:str
@@ -200,7 +200,7 @@ class Verschlüsselung():
 
         return f"{text:0{self.l}b}"
 
-    def verschlüsseln(self, text, KEY: str) -> str:
+    def verschlüsseln(self, text:str, KEY: str) -> str:
         """
         verschlüsselt den Text mit KEY
         -> text:str
@@ -279,7 +279,7 @@ class Verschlüsselung():
 
         return part
 
-    def _mix_letter(self,way,text:list,key:list) -> list:
+    def _mix_letter(self, way:bool, text:list,key:list) -> list:
         """
         mischt den text mit key
         way = richtung
@@ -306,8 +306,7 @@ class Verschlüsselung():
 
         return text
 
-
-    def mix_letter(self, way:bool, key:int, full_text_:int, chunk = 4) -> int:
+    def mix_letter(self, way:bool, key:int, full_text_:int, chunk= 4) -> int:
         """
         erzeugt aus full_text_ und key einen schlüssel
         und teit den text
@@ -389,7 +388,7 @@ class Verschlüsselung():
         return int(text_r,2)
 
     class cube_class():
-        def __init__(self, dimensions=3, debug=False):
+        def __init__(self, dimensions:int= 3, debug:bool= False) -> None:
             self.dimensions = dimensions
             self.debug = debug
 
@@ -404,7 +403,7 @@ class Verschlüsselung():
                 #print(f"self.cube: {self.cube}")
                 self.print_cube()
 
-        def rotate_array(self, arr, rotation=1):
+        def rotate_array(self, arr:list, rotation:int= 1) -> list:
             #print(f"rotation % 4 + 4 = {(rotation % 4) +4}")
             for i in range((rotation % 4) + 4):
                 h = list(zip(*arr[::-1]))
@@ -413,13 +412,13 @@ class Verschlüsselung():
                 arr = h
             return(arr)
         
-        def rotate(self, axis, plane, rotation):
+        def rotate(self, axis:str, plane:int, rotation:int) -> None:
             if axis == "z":
                 rotation = 4 - rotation
             for i in range(rotation % 4):
                 self._rotate(axis, plane)
 
-        def _rotate(self, axis, plane):
+        def _rotate(self, axis:str, plane:int) -> None:
             #determine fixed values for cube rotation
             if axis == "x":
                 rotations = [0, 0, 0, 2]
@@ -470,7 +469,7 @@ class Verschlüsselung():
             elif (plane == self.dimensions-1):
                 self.cube[rot_dict[axis][1]] = self.rotate_array(self.cube[rot_dict[axis][1]], 1)
         
-        def print_cube(self):
+        def print_cube(self) -> None:
             rotations = []
             for i1 in range(self.dimensions):
                 for i2 in range(self.dimensions):
@@ -490,7 +489,7 @@ class Verschlüsselung():
                     print(f"{str(self.cube[5][i1][i2])} ", end="")
                 print("")
     
-    def _cube_int_to_moves(self, integer, cube_dimensions, encrypt):
+    def _cube_int_to_moves(self, integer:int, cube_dimensions:int, encrypt:bool) -> list:
         '''
         returnt ein "step_array" = [[rotate_argument_1, rotate_argument_2, rotate_argument_3], ...]
         nutzt "integer" als seed
@@ -530,7 +529,7 @@ class Verschlüsselung():
 
         return step_array.copy()
     
-    def _cube_map_data(self, cube, text, cube_field_data_size):
+    def _cube_map_data(self, cube:list, text:str, cube_field_data_size:int) -> list:
         '''
         mappt <text> auf cube.<cube> zu <cube_field_data_size> großen chunks
         '''
@@ -543,7 +542,7 @@ class Verschlüsselung():
         
         return cube.copy()
     
-    def _cube_map_data_2(self, cube, text:list, cube_field_data_size=1):
+    def _cube_map_data_2(self, cube:list, text:list, cube_field_data_size:int= 1) -> list:
         '''
         mappt <text> auf cube.<cube> zu <cube_field_data_size> großen chunks
         '''
@@ -556,7 +555,7 @@ class Verschlüsselung():
         
         return cube.copy()
 
-    def _cube_get_data(self, cube) -> str:
+    def _cube_get_data(self, cube:list) -> str:
         '''
         nimmt cube.<cube> und returnt die daten als string
         '''
@@ -568,7 +567,7 @@ class Verschlüsselung():
         
         return text
     
-    def _cube_get_data_2(self, cube) -> list:
+    def _cube_get_data_2(self, cube:list) -> list:
         '''
         nimmt cube.<cube> und returnt die daten als liste
         '''
@@ -580,7 +579,7 @@ class Verschlüsselung():
         
         return text
 
-    def cube(self, text, key_m_cube, cube_dimensions=0, cube_field_data_size=0, encryption=True):
+    def cube(self, text:int, key_m_cube:int, cube_dimensions:int= 0, cube_field_data_size:int= 0, encryption:bool= True) -> int:
         '''
         mappt <text> in <cube_field_data_size> großen stücken auf die oberfläche eines rubics-cube
         mit <cube_dimensions> "flächen" (das entscheidet also obs ein 3x3x3, 4x4x4, ... ist)
@@ -633,7 +632,7 @@ class Verschlüsselung():
 
         return int(text_scrambled,2)
     
-    def cube_big(self, text, key_m_cube, cube_dimensions=0, cube_field_data_size=0, encryption=True) -> str:
+    def cube_big(self, text:str, key_m_cube:int, cube_dimensions:int= 0, cube_field_data_size:int= 0, encryption:bool= True) -> str:
         '''
         mappt <text> in <cube_field_data_size> großen stücken auf die oberfläche eines rubics-cube
         mit <cube_dimensions> "flächen" (das entscheidet also obs ein 3x3x3, 4x4x4, ... ist)
@@ -668,7 +667,7 @@ class Verschlüsselung():
 
 
 
-def run_test(l1):
+def run_test(l1:int) -> float:
     global Y
     global N
     #print("new process")
@@ -695,7 +694,7 @@ def run_test(l1):
     else: N+=1#; N_list.append((test, key))
     return t
 
-def run_test_multiprocessing(data):
+def run_test_multiprocessing(data:tuple) -> list:
     print("+")
     r, von, bis, s = data[0], data[1], data[2], data[3]
     #print("new process")

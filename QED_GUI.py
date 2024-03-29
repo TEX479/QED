@@ -7,7 +7,7 @@ import QED_hilfsfunktionen as hilfsfunktionen
 from random import randint
 
 
-def save_file(text, return_path:bool = False):
+def save_file(text, return_path:bool= False) -> None | str:
     """Save the 'text' as a new file."""
 
     filepath = asksaveasfilename(
@@ -21,7 +21,7 @@ def save_file(text, return_path:bool = False):
         f.write(content)
     if return_path: return filepath
 
-def open_file():
+def open_file() -> tuple[str, str]:
     """Open a file for editing."""
     filepath = askopenfilename(
         filetypes=[("QED-Files", ".qed.dat"), ("Textfiles", "*.txt"), ("All Files", "*")],
@@ -39,7 +39,7 @@ def open_file():
 
 
 class GUI():
-    def __init__(self, texts = {"o":"", "p":"", "v":"", "e":""}, chunk:int = 16, KEY = ["",""], debug = False) -> None:
+    def __init__(self, texts:dict= {"o":"", "p":"", "v":"", "e":""}, chunk:int= 16, KEY:list= ["",""], debug:bool= False) -> None:
         self.texts = texts
         self.KEY = KEY
         self.chunk = chunk
@@ -47,7 +47,7 @@ class GUI():
         
         self.create_gui(version_index="die funktionierende Version™", gui_version="nicht schön aber hässlich")
 
-    def create_gui(self, version_index, gui_version):
+    def create_gui(self, version_index:str, gui_version:str) -> None:
         self.main_window = tkinter.Tk()
         self.main_window.title(f"\"QED_GUI\" - version: {gui_version} // \"QED_system\" - version: {version_index}")
         #main_window.geometry("1920x1080")
@@ -133,7 +133,7 @@ class GUI():
 
         self.main_window.mainloop()
 
-    def start(self):
+    def start(self) -> None:
         if (self.texts["o"] != "") and (self.KEY[0] != ""):
             if self.debug: print("Verarbeiten...")
             duration = time.time()
@@ -156,8 +156,7 @@ class GUI():
             self.TEXT_e_sct.configure(state="disabled")
             if self.debug: print("fertig")
 
-
-    def open_file_f(self, w=None):
+    def open_file_f(self, w:str|None= None) -> None:
         if w == "k":
             self.KEY[0], self.KEY[1] = open_file()
             if self.debug: print("Schlüssel: ", self.KEY[0])
@@ -173,13 +172,13 @@ class GUI():
             self.TEXT_o_sct.configure(state="disabled")
             self.TEXT_o_lbl_p.configure(text=str(self.texts["p"]))
 
-    def save_key(self):
+    def save_key(self) -> None:
         key = hilfsfunktionen.IntToBit(randint(1,2**(8*int(self.keygen_len_entry.get()))))
         filepath = save_file(key, return_path=True)
         self.KEY[0] = key
         self.KEY[1] = filepath
 
-    def delete_file_f(self, w=None):
+    def delete_file_f(self, w:str|None= None) -> None:
         if w == "k":
             self.KEY[0], self.KEY[1] = "", ""
             self.key_lbl.configure(text="")
@@ -190,8 +189,7 @@ class GUI():
             self.TEXT_o_sct.configure(state="disabled")
             self.TEXT_o_lbl_p.configure(text="")
 
-
-    def use_as_input(self, what):
+    def use_as_input(self, what:str) -> None:
         if what == "v":
             self.texts["o"] = self.texts["v"]
             self.TEXT_o_sct.configure(state="normal")
@@ -209,6 +207,3 @@ class GUI():
 
 if __name__ == "__main__":
     g = GUI(debug=True)
-
-
-class fehler(ValueError): ...
