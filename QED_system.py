@@ -365,26 +365,82 @@ class Verschlüsselung():
         if self.debug: print("text: ",full_text,"#")
         return int("".join(f"{i:0{chunk}b}" for i in full_text),2)
 
+    def _key_intlist2int(self, key:list[int]) -> int:
+        value:int = 0
+        bit2append:int = 1
+        for element in key:
+            value = value << element
+            if bit2append == 1:
+                value = value + (1 << element) - 1
+                bit2append = 0
+            else:
+                bit2append = 1
+        return value
+
+    def _key_bit(self, key:list[int], bit:int) -> bool:
+        bit = bit % sum(key)
+        key_bit = True
+        for i in range(len(key)):
+            if bit < key[i]:
+                return key_bit
+            key_bit = not key_bit
+            bit -= key[i]
+        
+        raise ValueError("this should not be possible.")
+
+    def _VER_1_decrypt(self, text:list[int], key:list[int]) -> list[int]:
+        for element_index in range(1, len(text)):
+            element = text[element_index]
+            for xor_element in range(element_index-1, -1, -1):
+                if self._key_bit(key, (element_index-xor_element-1)):
+                    element = element ^ text[xor_element]
+            text[element_index] = element
+        return text
+
+    def _VER_1_encrypt(self, text:list[int], key:list[int]) -> list[int]:
+        text_encrypted = [text[0]]
+        for element_index in range(1, len(text)):
+            element = text[element_index]
+            for xor_element in range(element_index-1, -1, -1):
+                if self._key_bit(key, (element_index-xor_element-1)):
+                    element = element ^ text[xor_element]
+            text_encrypted.append(element)
+        return text_encrypted
+
+    def _int2chunks(self, text:int, text_length_bit:int, chunk:int) -> list[int]:
+        text_list = []
+        for i in range(0, (text_length_bit-1)//chunk+1):
+            selector:int = 2**chunk-1 << (text_length_bit-chunk if text_length_bit >= chunk else 0) >> (i*chunk)
+            shift: int = max((text_length_bit//chunk-1 -i)*chunk + (text_length_bit % chunk), 0)
+            value: int = (text & selector) >> shift
+            text_list.append(value)
+        return text_list
+
+    def _chunks2int(self, text_list:list[int], text_length:int, chunk:int):
+        text:int = 0
+        for i in range(len(text_list)-1):
+            text = text + text_list[i]
+            text = text << chunk
+        text = text >> (len(text_list * chunk) - text_length)
+        text += text_list[-1]
+        return text
+
     def VER_1(self, way:bool, text:int, key:list, l2:int) -> int:
         """
         struktur zum ver- und entschlüsseln der Methode 1
         """
-        #print("ver- oder entschlüsseln...")
-        text_ = []
-        for i in range(l2//self.chunk):
-            text_.append(int(f"{text:0{l2}b}"[i*self.chunk:(i+1)*self.chunk],2))
-        if l2%self.chunk != 0:
-            text_.append(int(f"{text:0{l2}b}"[(l2//self.chunk)*self.chunk:],2))
-        if len(key)>=2: key.reverse()
-        if not(way):#ver
-            for i in range(len(text_)-1, -1, -1): text_[i] = self._VER_1(text=text_, key=key, part=text_[i], pos=i)
-        else:#ent
-            for i in range(len(text_)): text_[i] = self._VER_1(text=text_, key=key, part=text_[i], pos=i)
-        text_r = ""
-        for i in text_[:-1]: text_r += f"{i:0{self.chunk}b}"
-        text_r += f"{text_[-1]:0{max([l2 - (l2//self.chunk)*self.chunk, self.chunk])}b}"
-        if self.debug: print("\t\t",text_r, len(text_r))
-        return int(text_r,2)
+        #print(f"VER1(way={way}, text={text}, key={key}, l2={l2}) -> ", end="")
+        text_list = self._int2chunks(text, l2, self.chunk)
+        if not(way): # verschlüsseln
+            text_list = self._VER_1_encrypt(text_list, key)
+        else: # entschlüsseln
+            text_list = self._VER_1_decrypt(text_list, key)
+        
+        text_processed = self._chunks2int(text_list, l2, self.chunk)
+        
+        #print(text_processed)
+        if self.debug: print("\t\t",f"{text_processed:0{l2}b}")
+        return text_processed
 
     class cube_class():
         def __init__(self, dimensions:int= 3, debug:bool= False) -> None:

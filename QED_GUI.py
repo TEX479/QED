@@ -137,7 +137,7 @@ class GUI():
         if (self.texts["o"] != "") and (self.KEY[0] != ""):
             if self.debug: print("Verarbeiten...")
             duration = time.time()
-            v = Verschlüsselung(chunk = self.chunk, debug = True)
+            v = Verschlüsselung(chunk = self.chunk, debug = False)
             self.texts["v"] = v.verschlüsseln(text = self.texts["o"], KEY = self.KEY[0])
             self.texts["e"] = v.entschlüsseln(text = self.texts["o"], KEY = self.KEY[0])
             duration = time.time() - duration
