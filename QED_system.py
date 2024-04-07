@@ -251,33 +251,6 @@ class Verschlüsselung():
 
         return f"{text:0{self.l}b}"
 
-    def _VER_1(self, text:list, key:list, part:int, pos:int) -> int:
-        """
-        xor der Bits von part mit den von text nach key
-        pos = position von part im text
-
-        key umgedreht eingeben!
-        """
-        go_on = True
-        i = 0
-        while go_on:
-            if i >= len(key):
-                i = 0
-            if i%2 == 0:
-                for i2 in range(key[i]):
-                    pos-=1
-                    if pos < 0:
-                        go_on = False
-                        break
-                    part = part^text[pos]
-            else: 
-                pos-=key[i]
-                if pos < 0:
-                    go_on = False
-            i += 1
-
-        return part
-
     def _mix_letter(self, way:bool, text:list,key:list) -> list:
         """
         mischt den text mit key
