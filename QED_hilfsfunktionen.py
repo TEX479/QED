@@ -1,9 +1,9 @@
 
-def IntToBit(x:int, lenght= 8) -> str:
-    return f"{x:0{lenght}b}"
+def IntToBit(x:int, length= 8) -> str:
+    return f"{x:0{x.bit_length() + (length - (x.bit_length() %length))}b}"
 
 def BitToInt(s:str, anz_bit= 8) -> list[int]:
-    s = s + ("0" * (anz_bit - (len(s) % anz_bit)))
+    if len(s)%anz_bit != 0: s = s + ("0" * (anz_bit - (len(s) % anz_bit)))
     return [int(s[i:i+anz_bit], 2) for i in range(0, len(s), anz_bit)]
 
 def int2anybase(input_number:int, base:int) -> list[int]:
