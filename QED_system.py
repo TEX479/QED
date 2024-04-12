@@ -149,7 +149,7 @@ class Verschlüsselung():
 
         return key_m_cube
 
-    def entschlüsseln(self, text:str, KEY: str) -> str:
+    def entschlüsseln(self, text:str, KEY:str) -> str:
         """
         entschlüsselt den Text mit KEY
         -> text:str
@@ -200,7 +200,7 @@ class Verschlüsselung():
 
         return f"{text:0{self.l}b}"
 
-    def verschlüsseln(self, text:str, KEY: str) -> str:
+    def verschlüsseln(self, text:str, KEY:str) -> str:
         """
         verschlüsselt den Text mit KEY
         -> text:str
@@ -278,7 +278,7 @@ class Verschlüsselung():
 
         return text
 
-    def mix_letter(self, way:bool, key:int, full_text_:int, chunk= 4) -> int:
+    def mix_letter(self, way:bool, key:int, full_text_:int, chunk:int= 4) -> int:
         """
         erzeugt aus full_text_ und key einen schlüssel
         und teit den text
@@ -400,20 +400,60 @@ class Verschlüsselung():
 
     def VER_1(self, way:bool, text:int, key:list, l2:int) -> int:
         """
-        struktur zum ver- und entschlüsseln der Methode 1
+        ver- und entschlüsseln der Methode 1
         """
-        #print(f"VER1(way={way}, text={text}, key={key}, l2={l2}) -> ", end="")
-        text_list = self._int2chunks(text, l2, self.chunk)
-        if not(way): # verschlüsseln
-            text_list = self._VER_1_encrypt(text_list, key)
-        else: # entschlüsseln
-            text_list = self._VER_1_decrypt(text_list, key)
+        #print("ver- oder entschlüsseln...")
+        text_r = text
+        x_o = self.chunk
+        go_on = True
+        i = 0
+        if not(way):
+            while go_on:
+                if i >= len(key):
+                    i = 0
+                if i%2 == 0:
+                    for i2 in range(key[i]):
+                        if x_o >= l2:
+                            go_on = False
+                            break
+                        text_r = text_r^(text>>x_o)
+                        x_o += self.chunk
+                else: 
+                    x_o += key[i]*self.chunk
+                    if x_o >= l2:
+                        go_on = False
+                i += 1
+        else:
+            for pos in range(math.ceil(l2/self.chunk)):
+                i = 0
+                go_on = True
+                xor = int(f"{text_r:0{l2}b}"[self.chunk*pos : self.chunk*(pos+1)],2)
+                xor_r = 0
+                l_shift = 0
+                if xor != 0:
+                    while go_on:
+                        if i >= len(key):
+                            i = 0
+                        if i%2 == 0:
+                            for i2 in range(key[i]):
+                                if xor_r.bit_length() >= l2-self.chunk*(pos+1):
+                                    go_on = False
+                                    break
+                                xor_r = (xor_r<<self.chunk) + xor
+                                l_shift += self.chunk
+                        else:
+                            try: 
+                                xor_r = xor_r<<(self.chunk*key[i])
+                            except:
+                                print(self.chunk, key[i])
+                            l_shift += self.chunk*key[i]
+                            if xor_r.bit_length() >= l2-self.chunk*(pos+1):
+                                go_on = False
+                        i += 1
+                    #print(bin(xor_r>>(l_shift-(l2-self.chunk*(pos+1))))[2:])
+                    text_r = text_r^(xor_r>>(l_shift-(l2-self.chunk*(pos+1))))
         
-        text_processed = self._chunks2int(text_list, l2, self.chunk)
-        
-        #print(text_processed)
-        if self.debug: print("\t\t",f"{text_processed:0{l2}b}")
-        return text_processed
+        return text_r
 
     class cube_class():
         def __init__(self, dimensions:int= 3, debug:bool= False) -> None:
