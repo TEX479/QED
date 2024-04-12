@@ -27,9 +27,9 @@ class Verschlüsselung():
         self.debug_c = debug_c
         self.debug_f = debug_f
 
-    def get_key(self, KEY:str, text=""):
+    def get_key(self, KEY:str) -> list:
         """
-        erzeugt aus KEY(str aus 0/1) und text(str aus 0/1)
+        erzeugt aus KEY(str aus 0/1) und text(int)
         -> key_start:int; key_m_cube:int; key_normal:list; key_mix:int
         ruft für key_m_cube  get_key_m_cube  auf
 
@@ -98,12 +98,13 @@ class Verschlüsselung():
         if len(S3) == 1: S3 = [int(S[:len(S)//2], 2), int(S[len(S)//2:], 2)]
 
         for i in range(1, len(S3)): key_normal.append(round(S3[i])+1)
-        if len(S3) == 2: key_normal.append(int(S3[1]))
+        if len(S3) == 2: key_normal.append(int(S3[1])+1)
 
-        if key_mix>=1: key_mix = int(key_mix%math.ceil(len(text)/self.chunk))
-        else: key_mix = int(key_mix*math.ceil(len(text)/self.chunk))
+        if key_mix>=1: key_mix = int(key_mix%math.ceil(self.l/self.chunk))
+        else: key_mix = int(key_mix*math.ceil(self.l/self.chunk))
 
-        key_start = int(S3[0]%math.ceil(len(text)/self.chunk)) if S3[0]>=1 else int(S3[0]*math.ceil(len(text)/self.chunk))
+        key_start = int(S3[0]%math.ceil(self.l/self.chunk)) if S3[0]>=1 else int(S3[0]*math.ceil(self.l/self.chunk))
+        if key_start == 0: key_start=math.ceil(self.l/self.chunk)-1
         
         if self.debug: print("S3: ",S3)
         
@@ -122,23 +123,21 @@ class Verschlüsselung():
         g -> ungefähre länge im 18er system
         """
         key_m_cube = ""
-        if sum(key_normal) > key_start:
+        if sum(key_normal) - 10 > key_start:
             while key_start > 0:
-                if key_start - key_normal[0] > 0:
+                if key_start > key_normal[0]:
                     key_start -= key_normal[0]
                     key_normal.pop(0)
                 else:
                     key_normal[0] -= key_start
                     key_start = 0
         else:
-            pass#???
+            pass
 
-        key_m_cube = int("".join(str(i) for i in key_normal))
-        #umwandeln in andere Systeme
-        key_m_cube = self.hilfsfunktionen.int2anybase(number=key_m_cube,base=5)
-        key_m_cube = [key_m_cube[i]+key_m_cube[i+1] for i in range(0, len(key_m_cube)//2, 2)]# + %10 ?
-        key_m_cube = self.hilfsfunktionen.anybase2anybase(key_m_cube, 9, 10)
-
+        if sum(key_normal) <= 1:
+            print("sum(key_normal) <= 1")
+            exit()
+        key_m_cube = key_normal.copy()
         while len(key_m_cube) < g:
             key_m_cube = int("".join(str(i) for i in key_m_cube))
             key_m_cube = self.hilfsfunktionen.int2anybase2(number=key_m_cube, base=1.7)
@@ -148,132 +147,118 @@ class Verschlüsselung():
             key_m_cube = self.hilfsfunktionen.anybase2anybase(number_=key_m_cube, input_base=10, output_base=5)# 5 -> ?
             key_m_cube = [key_m_cube[i]+key_m_cube[i+1] for i in range(0, len(key_m_cube)//2, 2)]# + %10 ?
             key_m_cube = self.hilfsfunktionen.anybase2anybase(key_m_cube, 9, 10)
+        
+        key_m_cube = int("".join(str(i) for i in key_m_cube))
+        #umwandeln in andere Systeme
+        key_m_cube = self.hilfsfunktionen.int2anybase(number=key_m_cube,base=5)
+        key_m_cube = [key_m_cube[i]+key_m_cube[i+1] for i in range(0, len(key_m_cube)//2, 2)]# + %10 ?
+        key_m_cube = self.hilfsfunktionen.anybase2anybase(key_m_cube, 9, 10)    
+        
         key_m_cube = int("".join(str(i) for i in key_m_cube))
 
         return key_m_cube
 
-    def entschlüsseln(self, text="", KEY = "") -> str:
+    def entschlüsseln(self, text:str, KEY: str) -> str:
         """
         entschlüsselt den Text mit KEY
         -> text:str
         way=True
         """
-        keys = self.get_key(KEY=KEY, text=text)
+        self.l = len(text)
+        text = int(text,2)
+        
+        keys = self.get_key(KEY=KEY)
         if self.debug: print("\n--- ENTSCHLÜSSELN ---\n")
-        if self.debug: print("original:        ", text, "\n")
+        if self.debug: print(f"original:\t {text:0{self.l}b} \nLänge: {self.l}\n")
         if self.debug_f: 
             with open("ENT_0_original.txt", "wb") as f:
-                f.write(bytes(BitToInt(text)))
+                f.write(bytes(BitToInt(f"{text:0{self.l}b}")))
 
 
-        text = self.mix_letter(way=True,full_text_=text, key=keys["m"])
-        if self.debug: print("nach mix_letter: ", text, "\n")
+        """text = self.mix_letter(way=True,full_text_=text, key=keys["m"])
+        if self.debug: print(f"nach mix_letter:\t {text:0{self.l}b} \nLänge: {self.l}\n")
         if self.debug_f: 
             with open("ENT_1_nach_mix_letter.txt", "wb") as f:
-                f.write(bytes(BitToInt(text)))
+                f.write(bytes(BitToInt(f"{text:0{self.l}b}")))
 
-
-        text_part = text[:keys["s"]*self.chunk]
-        text_part = text_part[::-1]
-        text_part = self.VER_1(way=True, text=text_part, key=keys["n"].copy())
-        text_part = text_part[::-1]
-        text_ = text[keys["s"]*self.chunk:]
-        text = text_part + text_#erw1
-        if self.debug: print("nach erw1:       ", text, "\n")
+        l2 = keys["s"]*self.chunk
+        text_part = f"{text:0{self.l}b}"[:l2]
+        text_part = int(text_part[::-1],2)
+        text_part = self.VER_1(way=True, text=text_part, key=keys["n"].copy(), l2=l2)
+        text_part = f"{text_part:0{l2}b}"[::-1]
+        text_ = f"{text:0{self.l}b}"[l2:]
+        text = int(text_part + text_,2)#erw1
+        if self.debug: print(f"nach erw1:\t {text:0{self.l}b} \nLänge: {self.l}\n")
         if self.debug_f: 
             with open("ENT_2_nach_m1_2.txt", "wb") as f:
-                f.write(bytes(BitToInt(text)))
+                f.write(bytes(BitToInt(f"{text:0{self.l}b}")))
 
 
         text = self.cube(text=text, key_m_cube=keys["c"], encryption=not(True))
-        if self.debug: print("nach cube:       ", text, "\n")
+        if self.debug: print(f"nach cube:\t {text:0{self.l}b} \nLänge: {self.l}\n")
         if self.debug_f: 
             with open("ENT_3_nach_cube.txt", "wb") as f:
-                f.write(bytes(BitToInt(text)))
+                f.write(bytes(BitToInt(f"{text:0{self.l}b}")))"""
 
 
-        text = self.VER_1(way=True, text=text, key=keys["n"].copy())
-        if self.debug: print("nach m1:         ", text, "\n")
+        text = self.VER_1(way=True, text=text, key=keys["n"].copy(), l2=self.l)
+        if self.debug: print(f"nach m1:\t {text:0{self.l}b} \nLänge: {self.l}\n")
         if self.debug_f: 
             with open("ENT_4_nach_m1.txt", "wb") as f:
-                f.write(bytes(BitToInt(text)))
+                f.write(bytes(BitToInt(f"{text:0{self.l}b}")))
 
-        return text
+        return f"{text:0{self.l}b}"
 
-    def verschlüsseln(self, text="", KEY = "") -> str:
+    def verschlüsseln(self, text: str, KEY: str) -> str:
         """
         verschlüsselt den Text mit KEY
         -> text:str
         way=False
-        """ 
-        keys = self.get_key(KEY=KEY, text=text)
+        """
+        self.l = len(text)
+        text = int(text,2)
+        
+        keys = self.get_key(KEY=KEY)
         if self.debug: print("\n--- VERSCHLÜSSELN ---\n")
-        if self.debug: print("original:        ", text, "\n")
+        if self.debug: print(f"original:\t {text:0{self.l}b} \nLänge: {self.l}\n")
         if self.debug_f: 
-            with open("VER_0_original.txt", "wb") as f:
-                f.write(bytes(BitToInt(text)))
+            with open("ENT_0_original.txt", "wb") as f:
+                f.write(bytes(BitToInt(f"{text:0{self.l}b}")))
 
-        text = self.VER_1(way=False, text=text, key=keys["n"].copy())
-        if self.debug: print("nach m1:         ", text, "\n")
+        text = self.VER_1(way=False, text=text, key=keys["n"].copy(), l2=self.l)
+        if self.debug: print(f"nach m1:\t {text:0{self.l}b} \nLänge: {self.l}\n")
         if self.debug_f: 
-            with open("VER_1_nach_m1.txt", "wb") as f:
-                f.write(bytes(BitToInt(text)))
+            with open("ENT_4_nach_m1.txt", "wb") as f:
+                f.write(bytes(BitToInt(f"{text:0{self.l}b}")))
 
 
-        text = self.cube(text=text, key_m_cube=keys["c"], encryption=not(False))
-        if self.debug: print("nach cube:       ", text, "\n")
+        """text = self.cube(text=text, key_m_cube=keys["c"], encryption=not(False))
+        if self.debug: print(f"nach cube:\t {text:0{self.l}b} \nLänge: {self.l}\n")
         if self.debug_f: 
-            with open("VER_2_nach_cube.txt", "wb") as f:
-                f.write(bytes(BitToInt(text)))
+            with open("ENT_3_nach_cube.txt", "wb") as f:
+                f.write(bytes(BitToInt(f"{text:0{self.l}b}")))
 
 
-        text_part = text[:keys["s"]*self.chunk]
-        text_part = text_part[::-1]
-        text_part = self.VER_1(way=False, text=text_part, key=keys["n"].copy())
-        text_part = text_part[::-1]
-        text_ = text[keys["s"]*self.chunk:]
-        text = text_part + text_#erw1
-        if self.debug: print("nach erw1:       ", text, "\n")
+        l2 = keys["s"]*self.chunk
+        text_part = f"{text:0{self.l}b}"[:l2]
+        text_part = int(text_part[::-1],2)
+        text_part = self.VER_1(way=False, text=text_part, key=keys["n"].copy(), l2=l2)
+        text_part = f"{text_part:0{l2}b}"[::-1]
+        text_ = f"{text:0{self.l}b}"[l2:]
+        text = int(text_part + text_,2)#erw1
+        if self.debug: print(f"nach erw1:\t {text:0{self.l}b} \nLänge: {self.l}\n")
         if self.debug_f: 
-            with open("VER_3_nach_m1_2.txt", "wb") as f:
-                f.write(bytes(BitToInt(text)))
+            with open("ENT_2_nach_m1_2.txt", "wb") as f:
+                f.write(bytes(BitToInt(f"{text:0{self.l}b}")))
 
 
-        text = (self.mix_letter(way=False, full_text_=text, key=keys["m"]))
-        if self.debug: print("nach mix_letter: ", text, "\n")
+        text = self.mix_letter(way=False,full_text_=text, key=keys["m"])
+        if self.debug: print(f"nach mix_letter:\t {text:0{self.l}b} \nLänge: {self.l}\n")
         if self.debug_f: 
-            with open("VER_4_nach_mix_letter.txt", "wb") as f:
-                f.write(bytes(BitToInt(text)))
+            with open("ENT_1_nach_mix_letter.txt", "wb") as f:
+                f.write(bytes(BitToInt(f"{text:0{self.l}b}")))"""
 
-        return text
-
-
-    def _VER_1(self, text:list, key:list, part:str, pos:int) -> str:
-        """
-        xor der Bits von part mit den von text nach key
-        pos = position von part im text
-
-        key umgedreht eingeben!
-        """
-        go_on = True
-        i = 0
-        while go_on:
-            if i >= len(key):
-                i = 0
-            if i%2 == 0:
-                for i2 in range(key[i]):
-                    pos-=1
-                    if pos < 0:
-                        go_on = False
-                        break
-                    part = self.hilfsfunktionen.IntToBit((int(part, 2)^int(text[pos][:len(part)], 2)), len(part))
-            else: 
-                pos-=key[i]
-                if pos < 0:
-                    go_on = False
-            i += 1
-
-        return part
+        return f"{text:0{self.l}b}"
 
     def _mix_letter(self,way,text:list,key:list) -> list:
         """
@@ -303,7 +288,7 @@ class Verschlüsselung():
         return text
 
 
-    def mix_letter(self, way:bool, key:int, full_text_:str, chunk = 4) -> str:
+    def mix_letter(self, way:bool, key:int, full_text_:int, chunk = 4) -> int:
         """
         erzeugt aus full_text_ und key einen schlüssel
         und teit den text
@@ -312,14 +297,15 @@ class Verschlüsselung():
         -> text vermischt
         """
         full_text = []
-        for i in range(len(full_text_)//chunk):
-            full_text.append(full_text_[i*chunk:(i+1)*chunk])
+        for i in range(self.l//chunk):
+            full_text.append(int(f"{full_text_:0{self.l}b}"[i*chunk:(i+1)*chunk],2))
+        if self.debug: print("full_text: ", full_text)
         #erzeugung und anpassung des Schlüssels + Text
         key_ = key
         go_on = True
         text_end = False
         key_mix = [full_text[key_]]
-        last_number = ""
+        last_number = -1
         while go_on:
             key_+=1
             if key_ >= len(full_text):
@@ -333,8 +319,8 @@ class Verschlüsselung():
                     last_number = full_text[key_]
 
         key_mix_copy = key_mix.copy()
-        if last_number != "": key_mix_copy.append(last_number)
-        for i in range(len(key_mix)): key_mix[i] = int(key_mix[i],2) + 1
+        if last_number != -1: key_mix_copy.append(last_number)
+        for i in range(len(key_mix)): key_mix[i] += 1
         s2 = key_mix.copy()
         s2.sort()
         for i in range(len(s2)):# alle Zahel aufeinanderfolgend 1.. bsp. 5 1 3 -> 3 1 2 
@@ -360,25 +346,63 @@ class Verschlüsselung():
             if self.debug: print("Text_part_2 (2): ",text_part2)      
             full_text.extend(text_part2)
         if self.debug: print("text: ",full_text,"#")
-        return "".join(i for i in full_text)
+        return int("".join(f"{i:0{chunk}b}" for i in full_text),2)
 
-    def VER_1(self, way, text:str, key:list) -> str:
+    def VER_1(self, way, text:int, key:list, l2) -> int:
         """
-        struktur zum ver- und entschlüsseln der Methode 1
+        ver- und entschlüsseln der Methode 1
         """
         #print("ver- oder entschlüsseln...")
-        text_ = []
-        for i in range(len(text)//self.chunk):
-            text_.append(text[i*self.chunk:(i+1)*self.chunk])
-        if len(text)%self.chunk != 0:
-            text_.append(text[(len(text)//self.chunk)*self.chunk:])
-        if len(key)>=2: key.reverse()
-        if not(way):#ver
-            for i in range(len(text_)-1, -1, -1): text_[i] = self._VER_1(text=text_, key=key, part=text_[i], pos=i)
-        else:#ent
-            for i in range(len(text_)): text_[i] = self._VER_1(text=text_, key=key, part=text_[i], pos=i)
-        text_r = ""
-        for i in text_: text_r += i
+        text_r = text
+        x_o = self.chunk
+        go_on = True
+        i = 0
+        if not(way):
+            while go_on:
+                if i >= len(key):
+                    i = 0
+                if i%2 == 0:
+                    for i2 in range(key[i]):
+                        if x_o >= l2:
+                            go_on = False
+                            break
+                        text_r = text_r^(text>>x_o)
+                        x_o += self.chunk
+                else: 
+                    x_o += key[i]*self.chunk
+                    if x_o >= l2:
+                        go_on = False
+                i += 1
+        else:
+            for pos in range(math.ceil(l2/self.chunk)):
+                i = 0
+                go_on = True
+                xor = int(f"{text_r:0{l2}b}"[self.chunk*pos : self.chunk*(pos+1)],2)
+                xor_r = 0
+                l_shift = 0
+                if xor != 0:
+                    while go_on:
+                        if i >= len(key):
+                            i = 0
+                        if i%2 == 0:
+                            for i2 in range(key[i]):
+                                if xor_r.bit_length() >= l2-self.chunk*(pos+1):
+                                    go_on = False
+                                    break
+                                xor_r = (xor_r<<self.chunk) + xor
+                                l_shift += self.chunk
+                        else:
+                            try: 
+                                xor_r = xor_r<<(self.chunk*key[i])
+                            except:
+                                print(self.chunk, key[i])
+                            l_shift += self.chunk*key[i]
+                            if xor_r.bit_length() >= l2-self.chunk*(pos+1):
+                                go_on = False
+                        i += 1
+                    #print(bin(xor_r>>(l_shift-(l2-self.chunk*(pos+1))))[2:])
+                    text_r = text_r^(xor_r>>(l_shift-(l2-self.chunk*(pos+1))))
+        
         return text_r
 
     class cube_class():
@@ -584,6 +608,8 @@ class Verschlüsselung():
 
         -> return text_verdreht
         '''
+        text = f"{text:0{self.l}b}"
+
         if cube_field_data_size == 0:
             cube_field_data_size = self.cube_field_data_size
         
@@ -622,7 +648,7 @@ class Verschlüsselung():
             key_m_cube_big = int(str(self.get_key_m_cube(key_m_cube_big, 343, 1000)))
             text_scrambled = self.cube_big(text_scrambled, key_m_cube_big, 20, cube_field_data_size_local, encryption)
 
-        return text_scrambled
+        return int(text_scrambled,2)
     
     def cube_big(self, text, key_m_cube, cube_dimensions=0, cube_field_data_size=0, encryption=True) -> str:
         '''
@@ -647,6 +673,7 @@ class Verschlüsselung():
         
         step_array = self._cube_int_to_moves(key_m_cube, cube_dimensions, encryption)
         #print("len(step_array): " + str(len(step_array)))
+
         for i in step_array:
             cube.rotate(i[0], i[1], i[2]+4)
         
@@ -663,7 +690,7 @@ class Verschlüsselung():
 
         def IntToBit(x:int, lenght = 8):
                 return f"{x:0{lenght}b}"
-
+        
         def int2anybase(number:int, base:int):
             if number != 0:
                 number_ = []
@@ -707,29 +734,35 @@ class Verschlüsselung():
 
 
 
-def run_test():
+def run_test(l1,l2):
     global Y
     global N
     #print("new process")
-    debug = False
-    debug_c = False
-    x = Verschlüsselung(debug=debug, debug_c=debug_c, debug_f=False)
+    debug = 0
+    debug_c = 0
+    x = Verschlüsselung(debug=debug, debug_c=debug_c, debug_f=0)
 
     test = ""
     key = ""
-    l1 = 1600#randint(10, 1600)
-    l2 = 100#randint(20, 100)
-    for i in range(l1*4): test += str(randint(0, 1))
+    #l1 = 1600#randint(10, 1600)
+    #l2 = 128#randint(20, 100)
+    for i in range(l1*8): test += str(randint(0, 1))
     for i in range(l2): key += str(randint(0, 1))
-
+    #test = "".join(x.hilfsfunktionen.IntToBit(ord(i)) for i in "Hello World.")
+    #key = "0000000110100100000100010100101110010001100001001011111001010010010010111001001111111011110000010101"
+    
     #if debug: print(test)
+    t = time.time()
     encrypted = x.verschlüsseln(text=test, KEY=key)
     decrypted = x.entschlüsseln(encrypted, key)
+    t = time.time() - t
     if test == decrypted:
         Y+=1
-    else: N+=1; N_list.append((test, key))
+    else: N+=1#; N_list.append((test, key))
+    return t
 
 def run_test_multiprocessing(data):
+    print("+")
     r, von, bis, s = data[0], data[1], data[2], data[3]
     #print("new process")
     debug = False
@@ -738,7 +771,7 @@ def run_test_multiprocessing(data):
     result = []
     
     #l1 = 1600#randint(10, 1600)
-    l2 = 100#randint(20, 100)
+    l2 = 128#randint(20, 100)
     
     for i in range(von, bis+1, s):
         Y = 0
@@ -759,53 +792,85 @@ def run_test_multiprocessing(data):
         t = time.time() - t
         result.append([i, Y, N, t])
         #print("\nY:", Y, "|", "N:", N, "|", "D:", t)
+    print("-")
     return result
 
 
 if __name__ == "__main__":
-    """q = []
-    x = Verschlüsselung(debug=False)
-    cube = x.cube_class(20)
-    cube.cube = x._cube_map_data_2(cube.cube.copy(), [i for i in range(1, 2401, 1)], 1)
-    for i in range(60):
-        m = x._cube_int_to_moves(i,20,True)
-        #print(m)
-        cube_ = cube
-        cube_.rotate(m[0][0], m[0][1], m[0][2])
-        g = x._cube_get_data_2(cube_.cube)
-        #print(m[0][0])
-        q.append(g)
-    #print(q)
-    with open("quick_rotate_20", "w") as f:
-        f.write(str(q))"""
-    """Y = 0
-    N = 0
-    N_list = []
-    p=[]
-    t = time.time()
-    r = 100
-    print(f"0\tvon {r}", end="")
-    for i in range(r):
-        run_test()
-        print(f"\r{i+1}\tvon {r}", end="")
-    t = time.time() - t
-    print("\nY:", Y, "|", "N:", N, "|", "D:", t)"""
-    cores = 10
-    anz = 100
-    start = 1000
-    stop = 1500
-    step = 100
-    work = [(anz, start, stop, step) for i in range(cores)]
-    with multiprocessing.Pool(cores) as p: 
-        data = p.map(run_test_multiprocessing, work)
-    for i in range(len(data[0])):
-        print(f"Text der länge {data[0][i][0]}\tY: {sum([i2[i][1] for i2 in data])} \t| N: {sum([i2[i][2] for i2 in data])} \t| D: {sum([i2[i][3] for i2 in data])} \t| {sum([i2[i][3] for i2 in data])/(cores*anz)}")
-    
-    #print(N_list)
-    #x = Verschlüsselung(debug=True, debug_c=False, debug_f=True)
-    #encrypted = x.verschlüsseln(text="0100100001100101011011000110110001101111001000000101011101101111011100100110110001100100", KEY="10000101010001010011011011010111111001101100101000111100")
-    #print("".join(chr(i) for i in BitToInt(x.entschlüsseln(text=encrypted, KEY="10000101010001010011011011010111111001101100101000111100"))))
-    
+    if 1:
+        Y = 0
+        N = 0
+        N_list = []
+        data = []
+        print("Ein-Kern-Test")
+        l2 = int(input("Länge des Schlüssels (in bits): "))
+        start = int(input("start (in bytes): "))#200
+        stop = int(input("stop (in bytes): "))#2000
+        step = int(input("step (in bytes): "))#100
+        r = int(input("Anzahl wiederholungen: "))
+        #p=[]
+
+        for l1 in range(start, stop+1, step):
+            t = 0#t = time.time()
+            print(f"Test mit {l1} Bytes Länge: ")
+            print(f"0\tvon {r}", end="")
+            for i in range(r):
+                t += run_test(l1,l2)
+                print(f"\r{i+1}\tvon {r}", end="")
+            #t = time.time() - t
+            print("\nY:", Y, "|", "N:", N, "|", "D:", t)
+            Y, N = 0, 0
+            data.append(t/r)
+        with open("speed_data.txt","w") as f:
+            f.write(__file__)
+            f.write("\n")
+            f.write(",".join(str(i) for i in range(start, stop+1, step)))
+            f.write("\n")
+            f.write(",".join(str(i) for i in data))
+        #print(N_list[0][0], "\n", N_list[0][1])
+
+    elif 0:
+        cores = 15
+        anz = 50
+        start = 200
+        stop = 2000
+        step = 100
+        work = [(anz, start, stop, step) for i in range(cores)]
+        print("begin\n")
+        with multiprocessing.Pool(cores) as p: 
+            data = p.map(run_test_multiprocessing, work)
+        for i in range(len(data[0])):
+            print(f"Text der länge {data[0][i][0]} Bytes\tY: {sum([i2[i][1] for i2 in data])} \t| N: {sum([i2[i][2] for i2 in data])} \t| D: {sum([i2[i][3] for i2 in data])} \t| {sum([i2[i][3] for i2 in data])/(cores*anz)}")
+        print("end\n")
+        with open("speed_data.txt","w") as f:
+            f.write(__file__)
+            f.write("\n")
+            f.write(",".join(str(i) for i in range(start, stop+1, step)))
+            f.write("\n")
+            w = []
+            for i in range(len(data[0])):
+                w.append(str(sum([i2[i][3] for i2 in data])/(cores*anz)))
+            f.write(",".join(i for i in w))
+
+    elif 0:
+        """x = Verschlüsselung(debug=True, debug_c=False, debug_f=True)
+        for i in range(100):
+            l = 10*8
+            l2 = 6*8
+            text = f"{randint(1, 2**80):0{l}b}"
+            key = f"{randint(1, 2**48):0{l2}b}"
+            #print(x.entschlüsseln(x.verschlüsseln(text, key), key) == text)
+            if not(x.entschlüsseln(x.verschlüsseln(text, key), key) == text):
+                print(text)
+                print(key)
+                break"""
+        text = "00111000100110000011110100010011101111010001001101010111010111000010011101010100"
+        key = "111110000111000110100001010111000110000101011100"
+        x = Verschlüsselung(debug=True, debug_c=False, debug_f=True)
+        print(x.entschlüsseln(x.verschlüsseln(text, key), key) == text)
+        #encrypted = x.verschlüsseln(text="0100100001100101011011000110110001101111001000000101011101101111011100100110110001100100", KEY="10000101010001010011011011010111111001101100101000111100")
+        #print("".join(chr(i) for i in BitToInt(x.entschlüsseln(text=encrypted, KEY="10000101010001010011011011010111111001101100101000111100"))))
+
 
 else:
     #print("erfolgreich Importiert: QED_system")
