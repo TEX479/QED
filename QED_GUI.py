@@ -27,7 +27,7 @@ def open_file() -> tuple[str, str]:
         filetypes=[("QED-Files", ".qed.dat"), ("Textfiles", "*.txt"), ("All Files", "*")],
     )
     if not filepath:
-        raise FileNotFoundError("no File was selected or no File could be parsed")
+        raise FileNotFoundError("No file was selected or no file could be parsed")
     with open(filepath, mode="rb") as f:
         content = f.read()
         content_arr = []
@@ -206,4 +206,4 @@ class GUI():
             self.start()
 
 if __name__ == "__main__":
-    g = GUI(debug=True)
+    g = GUI(debug=False)
