@@ -30,7 +30,7 @@ def open_file() -> tuple[str, str]:
         raise FileNotFoundError("no File was selected or no File could be parsed")
     with open(filepath, mode="rb") as f:
         content = f.read()
-        content_arr = []
+        content_arr:list[int] = []
         for i in content:
             content_arr.append(i)
         #print(content_arr)
