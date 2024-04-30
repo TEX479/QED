@@ -1,6 +1,6 @@
 
-def IntToBit(x:int, length= 8) -> str:
-    return f"{x:0{x.bit_length() + (length - (x.bit_length() %length))}b}"
+def IntToBit(x:int, length:int=8) -> str:
+    return "0"*((length - (x.bit_length() % length)) * int(x.bit_length() % length != 0)) + bin(x)[2:]
 
 def BitToInt(s:str, anz_bit= 8) -> list[int]:
     if len(s)%anz_bit != 0: s = s + ("0" * (anz_bit - (len(s) % anz_bit)))
