@@ -338,7 +338,7 @@ class Verschlüsselung():
         if self.debug: print("text: ",full_text,"#")
         return int("".join(f"{i:0{chunk}b}" for i in full_text),2)
 
-    def VER_1(self, way:bool, text:int, key:list, l2:int) -> int:
+    def VER_1(self, way:bool, text:int, key:list[int], l2:int) -> int:
         """
         ver- und entschlüsseln der Methode 1
         """
