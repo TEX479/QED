@@ -166,9 +166,7 @@ class Verschlüsselung():
         way=True
         """
         self.l = len(text)
-        text:int = int(text,2)
-        print(f"{self.l = }")
-
+        text = int(text,2)
         
         print("get_key(...)")
         keys = self.get_key(KEY=KEY)
@@ -222,10 +220,8 @@ class Verschlüsselung():
         way=False
         """
         self.l = len(text)
-        text:int = int(text,2)
-        print(f"{self.l = }")
+        text = int(text,2)
         
-
         print("get_key(...)")
         keys = self.get_key(KEY=KEY)
         if self.debug: print("\n--- VERSCHLÜSSELN ---\n")
@@ -308,9 +304,9 @@ class Verschlüsselung():
         way = richtung
         -> text vermischt
         """
-        full_text: list[int] = self._int2chunks(full_text_, self.l, chunk)
-        if (self.l % chunk) != 0:
-            full_text = full_text[:-1]
+        full_text = []
+        for i in range(self.l//chunk):
+            full_text.append(int(f"{full_text_:0{self.l}b}"[i*chunk:(i+1)*chunk],2))
         if self.debug: print("full_text: ", full_text)
         #erzeugung und anpassung des Schlüssels + Text
         key_ = key
@@ -360,92 +356,12 @@ class Verschlüsselung():
         if self.debug: print("text: ",full_text,"#")
         return int("".join(f"{i:0{chunk}b}" for i in full_text),2)
 
-    def _key_intlist2int(self, key:list[int]) -> int:
-        value:int = 0
-        bit2append:int = 1
-        for element in key:
-            value = value << element
-            if bit2append == 1:
-                value = value + (1 << element) - 1
-                bit2append = 0
-            else:
-                bit2append = 1
-        return value
-
-    def _key_bit(self, key:list[int], bit:int) -> bool:
-        bit = bit % sum(key)
-        key_bit = True
-        for i in range(len(key)):
-            if bit < key[i]:
-                return key_bit
-            key_bit = not key_bit
-            bit -= key[i]
-        
-        raise ValueError("this should not be possible.")
-
-    def _VER_1_decrypt(self, text:list[int], key:list[int]) -> list[int]:
-        for element_index in range(1, len(text)):
-            element = text[element_index]
-            for xor_element in range(element_index-1, -1, -1):
-                if self._key_bit(key, (element_index-xor_element-1)):
-                    element = element ^ text[xor_element]
-            text[element_index] = element
-        return text
-
-    def _VER_1_encrypt(self, text:list[int], key:list[int]) -> list[int]:
-        text_encrypted = [text[0]]
-        for element_index in range(1, len(text)):
-            element = text[element_index]
-            for xor_element in range(element_index-1, -1, -1):
-                if self._key_bit(key, (element_index-xor_element-1)):
-                    element = element ^ text[xor_element]
-            text_encrypted.append(element)
-        return text_encrypted
-
-    def _int2chunks(self, text:int, text_length_bit:int, chunk:int) -> list[int]:
-        text_list = []
-        for i in range(0, (text_length_bit-1)//chunk+1):
-            selector:int = 2**chunk-1 << (text_length_bit-chunk if text_length_bit >= chunk else 0) >> (i*chunk)
-            shift: int = max((text_length_bit//chunk-1 -i)*chunk + (text_length_bit % chunk), 0)
-            value: int = (text & selector) >> shift
-            text_list.append(value)
-        return text_list
-
-    def _chunks2int(self, text_list:list[int], text_length:int, chunk:int):
-        text:int = 0
-        for i in range(len(text_list)-1):
-            text = text + text_list[i]
-            text = text << chunk
-        text = text >> (len(text_list * chunk) - text_length)
-        text += text_list[-1]
-        return text
-
-    @timer
-    def VER_1(self, way:bool, text:int, key:list[int], l2:int) -> int:
-        """
-        struktur zum ver- und entschlüsseln der Methode 1
-        """
-        #print(f"VER_1({way=}, text=..., key=..., l2=...) -> ", end="")
-        text_list = self._int2chunks(text, l2, self.chunk)
-        if not(way): # verschlüsseln
-            text_list = self._VER_1_encrypt(text_list, key)
-        else: # entschlüsseln
-            text_list = self._VER_1_decrypt(text_list, key)
-        
-        text_processed = self._chunks2int(text_list, l2, self.chunk)
-        
-        #print(text_processed)
-        if self.debug: print("\t\t",f"{text_processed:0{l2}b}")
-        return text_processed
-
-    '''
     @timer
     def VER_1(self, way:bool, text:int, key:list[int], l2:int) -> int:
         """
         ver- und entschlüsseln der Methode 1
         """
         #print("ver- oder entschlüsseln...")
-        #print(f"VER_1({way=}, text=..., key=..., l2=...) -> int:\t", end="")
         text_r = text
         x_o = self.chunk
         go_on = True
@@ -497,7 +413,6 @@ class Verschlüsselung():
                     text_r = text_r^(xor_r>>(l_shift-(l2-self.chunk*(pos+1))))
         
         return text_r
-    '''
 
     class cube_class():
         def __init__(self, dimensions:int= 3, debug:bool= False) -> None:
