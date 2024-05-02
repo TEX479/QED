@@ -1,10 +1,24 @@
 
+import math
+
+'''
 def IntToBit(x:int, length:int=8) -> str:
     return "0"*((length - (x.bit_length() % length)) * int(x.bit_length() % length != 0)) + bin(x)[2:]
 
 def BitToInt(s:str, anz_bit= 8) -> list[int]:
     if len(s)%anz_bit != 0: s = s + ("0" * (anz_bit - (len(s) % anz_bit)))
     return [int(s[i:i+anz_bit], 2) for i in range(0, len(s), anz_bit)]
+'''
+def IntToBit(x:int, lenght = 8) -> str:
+        return "0"*((math.ceil((len(bin(x))-2)/lenght)*lenght+2)-len(bin(x))) + bin(x)[2:]
+
+def BitToInt(s:str, anz_bit= 8) -> list:
+        r= []
+        for i in range(len(s)//anz_bit):
+            r.append(int(s[i*anz_bit:(i+1)*anz_bit], 2))
+        if len(s)%anz_bit != 0:
+            r.append(int(s[(len(s)//anz_bit)*anz_bit:], 2))
+        return r
 
 def int2anybase(input_number:int, base:int) -> list[int]:
     if input_number == 0:
