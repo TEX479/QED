@@ -46,7 +46,7 @@ class Verschlüsselung():
 
         key_start = 0
         key_m_cube = 0
-        key_normal = []
+        key_normal:list[int] = []
         key_mix = 0
         key_len = 5#-----------------------------------------------------------------------------------------------------------
 
