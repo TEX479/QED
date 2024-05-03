@@ -126,7 +126,7 @@ class Verschlüsselung():
         g -> ungefähre länge im 18er system
         """
         key_m_cube = ""
-        if sum(key_normal) > key_start:
+        if sum(key_normal) - 10 > key_start:
             while key_start > 0:
                 if key_start > key_normal[0]:
                     key_start -= key_normal[0]
@@ -137,24 +137,26 @@ class Verschlüsselung():
         else:
             pass
 
-        key_m_cube = int("".join(str(i) for i in key_normal))
-        #umwandeln in andere Systeme
-        key_m_cube = hilfsfunktionen.int2anybase(input_number=key_m_cube,base=5)
-        key_m_cube = [key_m_cube[i]+key_m_cube[i+1] for i in range(0, len(key_m_cube)//2, 2)]# + %10 ?
-        key_m_cube = hilfsfunktionen.anybase2anybase(key_m_cube, 9, 10)
-
-        if key_m_cube == 0:
-            print("key_m_cube == 0")
+        if sum(key_normal) <= 1:
+            print("sum(key_normal) <= 1")
             exit()
+        key_m_cube = key_normal.copy()
         while len(key_m_cube) < g:
             key_m_cube = int("".join(str(i) for i in key_m_cube))
-            key_m_cube = hilfsfunktionen.int2anybase2(input_number=key_m_cube, base=1.7)
+            key_m_cube = self.hilfsfunktionen.int2anybase2(number=key_m_cube, base=1.7)
             key_m_cube = "".join(str(i*10).split(".")[0] for i in key_m_cube)
             key_m_cube = [int(i) for i in key_m_cube]
         while len(key_m_cube) > g*1.75:
-            key_m_cube = hilfsfunktionen.anybase2anybase(input_number=key_m_cube, input_base=10, output_base=5)# 5 -> ?
+            key_m_cube = self.hilfsfunktionen.anybase2anybase(number_=key_m_cube, input_base=10, output_base=5)# 5 -> ?
             key_m_cube = [key_m_cube[i]+key_m_cube[i+1] for i in range(0, len(key_m_cube)//2, 2)]# + %10 ?
-            key_m_cube = hilfsfunktionen.anybase2anybase(key_m_cube, 9, 10)
+            key_m_cube = self.hilfsfunktionen.anybase2anybase(key_m_cube, 9, 10)
+        
+        key_m_cube = int("".join(str(i) for i in key_m_cube))
+        #umwandeln in andere Systeme
+        key_m_cube = self.hilfsfunktionen.int2anybase(number=key_m_cube,base=5)
+        key_m_cube = [key_m_cube[i]+key_m_cube[i+1] for i in range(0, len(key_m_cube)//2, 2)]# + %10 ?
+        key_m_cube = self.hilfsfunktionen.anybase2anybase(key_m_cube, 9, 10)    
+        
         key_m_cube = int("".join(str(i) for i in key_m_cube))
 
         return key_m_cube
@@ -780,7 +782,7 @@ class Verschlüsselung():
 
 
 
-def run_test(l1:int) -> float:
+def run_test(l1:int, l2:int) -> float:
     global Y
     global N
     #print("new process")
@@ -791,7 +793,7 @@ def run_test(l1:int) -> float:
     test = ""
     key = ""
     #l1 = 1600#randint(10, 1600)
-    l2 = 128#randint(20, 100)
+    #l2 = 128#randint(20, 100)
     for i in range(l1*8): test += str(randint(0, 1))
     for i in range(l2): key += str(randint(0, 1))
     #test = "".join(x.hilfsfunktionen.IntToBit(ord(i)) for i in "Hello World.")
@@ -807,9 +809,9 @@ def run_test(l1:int) -> float:
     else: N+=1#; N_list.append((test, key))
     return t
 
-def run_test_multiprocessing(data:tuple) -> list:
+def run_test_multiprocessing(data:tuple[int, int, int, int]) -> list:
     print("+")
-    r, von, bis, s = data[0], data[1], data[2], data[3]
+    r, von, bis, s = data
     #print("new process")
     debug = False
     debug_c = False
@@ -849,18 +851,21 @@ if __name__ == "__main__":
         N_list = []
         data = []
         print("Ein-Kern-Test")
+        l2 = int(input("Länge des Schlüssels (in bits): "))
         start = int(input("start (in bytes): "))#200
         stop = int(input("stop (in bytes): "))#2000
         step = int(input("step (in bytes): "))#100
-        r = int(input("Anzahl wiederholungen: "))
+        r = int(r_len := input("Anzahl wiederholungen: "))
+        r_len = len(r_len)
         #p=[]
 
         for l1 in range(start, stop+1, step):
             t = 0#t = time.time()
+            print(f"Test mit {l1} Bytes Länge: ")
             print(f"0\tvon {r}", end="")
             for i in range(r):
-                t += run_test(l1)
-                print(f"\r{i+1}\tvon {r}", end="")
+                t += run_test(l1,l2)
+                print(f"\r{i+1: >{r_len}} von {r}", end="")
             #t = time.time() - t
             print("\nY:", Y, "|", "N:", N, "|", "D:", t)
             Y, N = 0, 0
