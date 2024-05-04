@@ -143,19 +143,19 @@ class Verschlüsselung():
         key_m_cube = key_normal.copy()
         while len(key_m_cube) < g:
             key_m_cube = int("".join(str(i) for i in key_m_cube))
-            key_m_cube = self.hilfsfunktionen.int2anybase2(number=key_m_cube, base=1.7)
+            key_m_cube = hilfsfunktionen.int2anybase2(input_number=key_m_cube, base=1.7)
             key_m_cube = "".join(str(i*10).split(".")[0] for i in key_m_cube)
             key_m_cube = [int(i) for i in key_m_cube]
         while len(key_m_cube) > g*1.75:
-            key_m_cube = self.hilfsfunktionen.anybase2anybase(number_=key_m_cube, input_base=10, output_base=5)# 5 -> ?
+            key_m_cube = hilfsfunktionen.anybase2anybase(input_number=key_m_cube, input_base=10, output_base=5)# 5 -> ?
             key_m_cube = [key_m_cube[i]+key_m_cube[i+1] for i in range(0, len(key_m_cube)//2, 2)]# + %10 ?
-            key_m_cube = self.hilfsfunktionen.anybase2anybase(key_m_cube, 9, 10)
+            key_m_cube = hilfsfunktionen.anybase2anybase(input_number=key_m_cube, input_base=9, output_base=10)
         
         key_m_cube = int("".join(str(i) for i in key_m_cube))
         #umwandeln in andere Systeme
-        key_m_cube = self.hilfsfunktionen.int2anybase(number=key_m_cube,base=5)
+        key_m_cube = hilfsfunktionen.int2anybase(input_number=key_m_cube, base=5)
         key_m_cube = [key_m_cube[i]+key_m_cube[i+1] for i in range(0, len(key_m_cube)//2, 2)]# + %10 ?
-        key_m_cube = self.hilfsfunktionen.anybase2anybase(key_m_cube, 9, 10)    
+        key_m_cube = hilfsfunktionen.anybase2anybase(input_number=key_m_cube, input_base=9, output_base=10)    
         
         key_m_cube = int("".join(str(i) for i in key_m_cube))
 
@@ -422,6 +422,7 @@ class Verschlüsselung():
         text += text_list[-1]
         return text
 
+    '''
     @timer
     def VER_1(self, way:bool, text:int, key:list[int], l2:int) -> int:
         """
@@ -439,8 +440,8 @@ class Verschlüsselung():
         #print(text_processed)
         if self.debug: print("\t\t",f"{text_processed:0{l2}b}")
         return text_processed
-
     '''
+
     @timer
     def VER_1(self, way:bool, text:int, key:list[int], l2:int) -> int:
         """
@@ -499,7 +500,6 @@ class Verschlüsselung():
                     text_r = text_r^(xor_r>>(l_shift-(l2-self.chunk*(pos+1))))
         
         return text_r
-    '''
 
     class cube_class():
         def __init__(self, dimensions:int= 3, debug:bool= False) -> None:

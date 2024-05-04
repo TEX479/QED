@@ -75,8 +75,10 @@ class GUI():
 
 
         """CONTROL"""
-        self.ver_btn = tkinter.Button(master=self.top_btns, background = "#ffffff", fg = "#000000", text="Verarbeiten", command=self.start)
+        self.ver_btn = tkinter.Button(master=self.top_btns, background = "#ffffff", fg = "#000000", text="Verschlüsseln", command=lambda: self.crypt(encrypt=True))
         self.ver_btn.grid(row=0, column=0, padx=5, pady=5, sticky="nw")
+        self.ver_btn = tkinter.Button(master=self.top_btns, background = "#ffffff", fg = "#000000", text="Entschlüsseln", command=lambda: self.crypt(encrypt=False))
+        self.ver_btn.grid(row=0, column=1, padx=5, pady=5, sticky="nw")
 
         """KEY"""
         self.key_lbl = tkinter.Label(master=self.key_btns, background = "#ffffff", fg = "#000000", text="Schlüssel: ")
@@ -156,6 +158,37 @@ class GUI():
             self.TEXT_e_sct.configure(state="disabled")
             if self.debug: print("fertig")
 
+    def crypt(self, encrypt:bool):
+        if (self.texts["o"] == "") or (self.KEY[0] == ""):
+            if self.debug: print("Text oder Key nicht festgelegt...")
+            return
+        if self.debug: print("Verarbeiten...")
+        duration = time.time()
+        v = Verschlüsselung(chunk=self.chunk, debug=False)
+        if encrypt:
+            self.texts["v"] = v.verschlüsseln(text = self.texts["o"], KEY = self.KEY[0])
+            #self.texts["v"] = bytes(hilfsfunktionen.BitToInt(v.verschlüsseln(self.texts["o"], self.KEY[0])))
+            #v.verschlüsseln(self.texts["input"], self.KEY[0])
+            #bytes(hilfsfunktionen.BitToInt(v.verschlüsseln(self.texts["input"], self.KEY[0])))
+
+            self.TEXT_v_sct.configure(state="normal")
+            self.TEXT_v_sct.delete("1.0", tkinter.END)
+            self.TEXT_v_sct.insert(tkinter.INSERT, "".join([chr(i) for i in hilfsfunktionen.BitToInt(self.texts["v"])]))
+            self.TEXT_v_sct.configure(state="disabled")
+        else:
+            self.texts["e"] = v.entschlüsseln(text = self.texts["o"], KEY = self.KEY[0])
+            #self.texts["e"] = bytes(hilfsfunktionen.BitToInt(v.entschlüsseln(self.texts["o"], self.KEY[0])))
+
+            self.TEXT_e_sct.configure(state="normal")
+            self.TEXT_e_sct.delete("1.0", tkinter.END)
+            self.TEXT_e_sct.insert(tkinter.INSERT, "".join([chr(i) for i in hilfsfunktionen.BitToInt(self.texts["e"])]))
+            self.TEXT_e_sct.configure(state="disabled")
+
+        duration = time.time() - duration
+        if self.debug: print("duration: ", duration)
+        if self.debug: print("output: ", self.texts["v"] if encrypt else self.texts["e"])
+        if self.debug: print("fertig")
+
     def open_file_f(self, w:str|None= None) -> None:
         if w == "k":
             self.KEY[0], self.KEY[1] = open_file()
@@ -196,14 +229,12 @@ class GUI():
             self.TEXT_o_sct.delete("1.0", tkinter.END)
             self.TEXT_o_sct.insert(tkinter.INSERT, "".join([chr(i) for i in hilfsfunktionen.BitToInt(self.texts["o"])]))
             self.TEXT_o_sct.configure(state="disabled")
-            self.start()
         elif what == "e":
             self.texts["o"] = self.texts["e"]
             self.TEXT_o_sct.configure(state="normal")
             self.TEXT_o_sct.delete("1.0", tkinter.END)
             self.TEXT_o_sct.insert(tkinter.INSERT, "".join([chr(i) for i in hilfsfunktionen.BitToInt(self.texts["o"])]))
             self.TEXT_o_sct.configure(state="disabled")
-            self.start()
 
 if __name__ == "__main__":
     g = GUI(debug=False)
