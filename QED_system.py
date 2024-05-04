@@ -443,61 +443,44 @@ class Verschlüsselung():
     '''
 
     @timer
-    def VER_1(self, way:bool, text:int, key:list[int], l2:int) -> int:
+    def VER_1(self, way, text:int, key:list, l2) -> int:
         """
         ver- und entschlüsseln der Methode 1
         """
         #print("ver- oder entschlüsseln...")
-        #print(f"VER_1({way=}, text=..., key=..., l2=...) -> int:\t", end="")
         text_r = text
-        x_o = self.chunk
-        go_on = True
-        i = 0
+        key_ = 0
+        chunks = math.ceil(l2/self.chunk)
+        for i in range(len(key)):
+            if i&1:
+                key_ = key_ << key[i]
+            else:
+                key_ = (key_ << key[i]) + (1<<key[i]) - 1
+        
+        key__ = key_
+        k_l = key__.bit_length()
+        for i in range(math.ceil(chunks/k_l)-1):
+            key_ = (key_ << k_l) + key__
+        if key_.bit_length() * self.chunk > l2:
+            key_ = key_ >> ((key_.bit_length()*self.chunk - l2)//self.chunk)
+        
+        k_l = key_.bit_length()
+
         if not(way):
-            while go_on:
-                if i >= len(key):
-                    i = 0
-                if i%2 == 0:
-                    for i2 in range(key[i]):
-                        if x_o >= l2:
-                            go_on = False
-                            break
-                        text_r = text_r^(text>>x_o)
-                        x_o += self.chunk
-                else: 
-                    x_o += key[i]*self.chunk
-                    if x_o >= l2:
-                        go_on = False
-                i += 1
+            for i in range(chunks-1):
+                text_r = text_r^((text >> (self.chunk*(i+1)))*(0!=(key_ & (1<<(k_l-i-1)))))
+            
         else:
-            for pos in range(math.ceil(l2/self.chunk)):
-                i = 0
-                go_on = True
-                xor = int(f"{text_r:0{l2}b}"[self.chunk*pos : self.chunk*(pos+1)],2)
-                xor_r = 0
-                l_shift = 0
-                if xor != 0:
-                    while go_on:
-                        if i >= len(key):
-                            i = 0
-                        if i%2 == 0:
-                            for i2 in range(key[i]):
-                                if xor_r.bit_length() >= l2-self.chunk*(pos+1):
-                                    go_on = False
-                                    break
-                                xor_r = (xor_r<<self.chunk) + xor
-                                l_shift += self.chunk
-                        else:
-                            try: 
-                                xor_r = xor_r<<(self.chunk*key[i])
-                            except:
-                                print(self.chunk, key[i])
-                            l_shift += self.chunk*key[i]
-                            if xor_r.bit_length() >= l2-self.chunk*(pos+1):
-                                go_on = False
-                        i += 1
-                    #print(bin(xor_r>>(l_shift-(l2-self.chunk*(pos+1))))[2:])
-                    text_r = text_r^(xor_r>>(l_shift-(l2-self.chunk*(pos+1))))
+            offset = chunks*self.chunk - l2
+            text_r = text_r << offset
+            for i in range(chunks-1):
+                part = (1<<self.chunk) - 1
+                part = (text_r >> ((chunks-i-1)*self.chunk)) & part
+                part_ = part
+                for i2 in range(chunks-i-2):
+                    part_ = (part_ << self.chunk) + part*(0!=(key_ & (1<<(k_l-i2-2))))
+                text_r = text_r^part_
+            text_r = text_r >> offset
         
         return text_r
 
