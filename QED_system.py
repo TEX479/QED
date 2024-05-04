@@ -161,14 +161,14 @@ class Verschlüsselung():
 
         return key_m_cube
 
-    def entschlüsseln(self, text:str, KEY:str) -> str:
+    def entschlüsseln(self, text:bytes, KEY:str) -> bytes:
         """
         entschlüsselt den Text mit KEY
         -> text:str
         way=True
         """
-        self.l = len(text)
-        text:int = int(text,2)
+        self.l = len(text)*8
+        text:int = int.from_bytes(text)
         print(f"{self.l = }")
 
         
@@ -215,16 +215,17 @@ class Verschlüsselung():
                 f.write(bytes(hilfsfunktionen.BitToInt(f"{text:0{self.l}b}")))
 
         print("returning...")
-        return f"{text:0{self.l}b}"
+        #return f"{text:0{self.l}b}"
+        return text.to_bytes(self.l//8)
 
-    def verschlüsseln(self, text:str, KEY:str) -> str:
+    def verschlüsseln(self, text:str, KEY:str) -> bytes:
         """
         verschlüsselt den Text mit KEY
         -> text:str
         way=False
         """
-        self.l = len(text)
-        text:int = int(text,2)
+        self.l = len(text)*8
+        text:int = int.from_bytes(text)
         print(f"{self.l = }")
         
 
@@ -272,7 +273,7 @@ class Verschlüsselung():
                 f.write(bytes(hilfsfunktionen.BitToInt(f"{text:0{self.l}b}")))
 
         print("returning...")
-        return f"{text:0{self.l}b}"
+        return text.to_bytes(self.l//8)
 
     def _mix_letter(self, way:bool, text:list,key:list) -> list:
         """
