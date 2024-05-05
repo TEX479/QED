@@ -132,7 +132,7 @@ class GUI():
 
         self.main_window.mainloop()
 
-    def crypt(self, encrypt:bool):
+    def crypt(self, encrypt:bool) -> None:
         if (self.text_input == bytes("".encode())) or (self.KEY[0] == ""):
             if self.debug: print("Text oder Key nicht festgelegt...")
             return
