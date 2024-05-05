@@ -26,6 +26,16 @@
 ### fixed
 - multiple bugs
 
+## [system_1_1_2_int](https://github.com/TEX479/QED/blob/main/QED_system_1_1_2_int.py) 12.04.2024
+### changed
+- inner workings of `VER_1()` to run faster (and not get stuck in an infinite loop)
+
+## [system_1_1_1_int](https://github.com/TEX479/QED/blob/main/QED_system_1_1_1_int.py) 12.04.2024
+### changed
+- some inner workings of `get_key_m_cube()` (for optimization?)
+### fixed
+- issue with `VER_1()` where en- & decryption was broken on inputs with an odd byte-length
+
 ## [system_1_1_0_int](https://github.com/TEX479/QED/blob/main/QED_system_1_1_0_int.py) 09.11.2023
 see [system_1_0_0_int](https://github.com/TEX479/QED/blob/main/QED_system_1_0_0_int.py)
 
