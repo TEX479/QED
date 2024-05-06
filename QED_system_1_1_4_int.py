@@ -13,7 +13,7 @@ def BitToInt(s:str, anz_bit= 8) -> list:
 
 
 class Verschlüsselung():
-    def __init__(self, chunk = 256, debug = True, cube_field_data_size = 1, debug_c=False, debug_f=False) -> None:
+    def __init__(self, chunk = 16, debug = True, cube_field_data_size = 1, debug_c=False, debug_f=False) -> None:
         """
         debug_c -> debug für cube class
         debug   -> debug alles andere
