@@ -166,7 +166,7 @@ class Verschlüsselung():
         way=True
         """
         self.l = len(text)*8
-        text:int = int.from_bytes(text)
+        text:int = int.from_bytes(text, "big")
         if self.debug: print(f"{self.l = }")
 
         
@@ -213,7 +213,7 @@ class Verschlüsselung():
 
         if self.debug: print("returning...")
         #return f"{text:0{self.l}b}"
-        return text.to_bytes(self.l//8)
+        return text.to_bytes(self.l//8, "big")
 
     def verschlüsseln(self, text:bytes, KEY:str) -> bytes:
         """
@@ -222,7 +222,7 @@ class Verschlüsselung():
         way=False
         """
         self.l = len(text)*8
-        text:int = int.from_bytes(text)
+        text:int = int.from_bytes(text, "big")
         if self.debug: print(f"{self.l = }")
         
         keys = self.get_key(KEY=KEY)
@@ -266,7 +266,7 @@ class Verschlüsselung():
                 f.write(bytes(BitToInt(f"{text:0{self.l}b}")))
 
         if self.debug: print("returning...")
-        return text.to_bytes(self.l//8)
+        return text.to_bytes(self.l//8, "big")
 
     def _mix_letter(self,way,text:int,key:list,l2:int, chunk = 4) -> int:
         """

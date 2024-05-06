@@ -170,7 +170,7 @@ class GUI():
         if w == "k":
             self.KEY[0], self.KEY[1] = open_file()
             #self.KEY[0] = self.KEY[0].decode()
-            self.KEY[0] = IntToBit(int.from_bytes(self.KEY[0]))
+            self.KEY[0] = IntToBit(int.from_bytes(self.KEY[0], "big"))
             if self.debug: print("Schlüssel: ", self.KEY[0])
             self.key_lbl.configure(text=str(self.KEY[1]))
         elif w == "kg":
