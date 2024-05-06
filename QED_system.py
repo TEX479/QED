@@ -218,7 +218,7 @@ class Verschlüsselung():
         #return f"{text:0{self.l}b}"
         return text.to_bytes(self.l//8)
 
-    def verschlüsseln(self, text:str, KEY:str) -> bytes:
+    def verschlüsseln(self, text:bytes, KEY:str) -> bytes:
         """
         verschlüsselt den Text mit KEY
         -> text:str
