@@ -469,7 +469,7 @@ class Verschlüsselung():
 
         if not(way):
             for i in range(chunks-1):
-                text_r = text_r^((text >> (self.chunk*(i+1)))*(0!=(key_ & (1<<(k_l-i-1)))))
+                text_r = text_r^((text >> (self.chunk*(i+1)))*((key_ >> (k_l-i-1)) & 1))
             
         else:
             offset = chunks*self.chunk - l2
