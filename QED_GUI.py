@@ -33,12 +33,12 @@ def open_file() -> tuple[bytes, str]:
 
 
 class GUI():
-    def __init__(self, chunk:int= 16, KEY:list= ["",""], debug:bool= False) -> None:
+    def __init__(self, chunk:int= 16, KEY:tuple[str, str]=("",""), debug:bool= False) -> None:
         self.text_input = bytes("".encode())
         self.text_encrypted = bytes("".encode())
         self.text_decrypted = bytes("".encode())
         self.text_path = ""
-        self.KEY = KEY
+        self.key: tuple[str, str] = KEY
         self.chunk = chunk
         self.debug = debug
         
@@ -82,7 +82,7 @@ class GUI():
         self.key_lbl.grid(row=0, column=0, padx=5, pady=5, sticky="nw")
         self.key_btn = tkinter.Button(master=self.key_btns, background = "#ffffff", fg = "#000000", text="Schlüssel-Datei öffnen", command=lambda: self.open_file_f("k"))
         self.key_btn.grid(row=0, column=1, padx=5, pady=5, sticky="nw")
-        self.key_lbl = tkinter.Label(master=self.key_btns, background = "#ffffff", fg = "#000000", text=self.KEY[1])
+        self.key_lbl = tkinter.Label(master=self.key_btns, background = "#ffffff", fg = "#000000", text=self.key[1])
         self.key_lbl.grid(row=0, column=2, padx=5, pady=5, sticky="nw")
         self.key_btn_X = tkinter.Button(master=self.key_btns, background = "#ffffff", fg = "#000000", text="X", command=lambda: self.delete_file_f("k"))
         self.key_btn_X.grid(row=0, column=3, padx=5, pady=5, sticky="nw")
@@ -133,14 +133,14 @@ class GUI():
         self.main_window.mainloop()
 
     def crypt(self, encrypt:bool) -> None:
-        if (self.text_input == bytes("".encode())) or (self.KEY[0] == ""):
+        if (self.text_input == bytes("".encode())) or (self.key[0] == ""):
             if self.debug: print("Text oder Key nicht festgelegt...")
             return
         if self.debug: print("Verarbeiten...")
         duration = time.time()
         v = Verschlüsselung(chunk=self.chunk, debug=False)
         if encrypt:
-            self.text_encrypted = v.verschlüsseln(self.text_input, self.KEY[0])
+            self.text_encrypted = v.verschlüsseln(self.text_input, self.key[0])
 
             self.TEXT_v_sct.configure(state="normal")
             self.TEXT_v_sct.delete("1.0", tkinter.END)
@@ -149,7 +149,7 @@ class GUI():
             self.TEXT_v_sct.insert(tkinter.INSERT, self.text_encrypted.decode(encoding="utf-8", errors="replace"))
             self.TEXT_v_sct.configure(state="disabled")
         else:
-            self.text_decrypted = v.entschlüsseln(self.text_input, self.KEY[0])
+            self.text_decrypted = v.entschlüsseln(self.text_input, self.key[0])
 
             self.TEXT_e_sct.configure(state="normal")
             self.TEXT_e_sct.delete("1.0", tkinter.END)
@@ -163,11 +163,11 @@ class GUI():
 
     def open_file_f(self, w:str|None= None) -> None:
         if w == "k":
-            self.KEY[0], self.KEY[1] = open_file()
+            key0, key1 = open_file()
             #self.KEY[0] = self.KEY[0].decode()
-            self.KEY[0] = hilfsfunktionen.IntToBit(int.from_bytes(self.KEY[0]))
-            if self.debug: print("Schlüssel: ", self.KEY[0])
-            self.key_lbl.configure(text=str(self.KEY[1]))
+            self.key = (hilfsfunktionen.IntToBit(int.from_bytes(key0)), key1)
+            if self.debug: print("Schlüssel: ", self.key[0])
+            self.key_lbl.configure(text=str(self.key[1]))
         elif w == "kg":
             pass
         else:
@@ -181,13 +181,13 @@ class GUI():
 
     def save_key(self) -> None:
         key = hilfsfunktionen.IntToBit(randint(1,2**(8*int(self.keygen_len_entry.get()))))
-        filepath = save_file(key, return_path=True)
-        self.KEY[0] = key
-        self.KEY[1] = filepath
+        filepath = save_file(key.encode(), return_path=True)
+        if filepath == None: return
+        self.key = (key, filepath)
 
     def delete_file_f(self, w:str|None= None) -> None:
         if w == "k":
-            self.KEY[0], self.KEY[1] = "", ""
+            self.key = ("", "")
             self.key_lbl.configure(text="")
         else:
             self.text_input, self.text_path = bytes("".encode()), str("")

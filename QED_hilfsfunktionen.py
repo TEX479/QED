@@ -10,11 +10,11 @@ def BitToInt(s:str, anz_bit= 8) -> list[int]:
     return [int(s[i:i+anz_bit], 2) for i in range(0, len(s), anz_bit)]
 '''
 
-def IntToBit(x:int, lenght = 8) -> str:
+def IntToBit(x:int, lenght:int=8) -> str:
         return "0"*((math.ceil((x.bit_length())/lenght)*lenght)-x.bit_length()) + bin(x)[2:]
 
-def BitToInt(s:str, anz_bit= 8) -> list:
-        r= []
+def BitToInt(s:str, anz_bit:int=8) -> list[int]:
+        r: list[int] = []
         for i in range(len(s)//anz_bit):
             r.append(int(s[i*anz_bit:(i+1)*anz_bit], 2))
         if len(s)%anz_bit != 0:
@@ -25,7 +25,7 @@ def int2anybase(input_number:int, base:int) -> list[int]:
     if input_number == 0:
         return [0]
     
-    output_number = []
+    output_number: list[int] = []
     while input_number > 0:
         output_number.append(input_number%base)
         input_number = input_number//base
@@ -37,7 +37,7 @@ def int2anybase2(input_number:int, base:float) -> list[float]:
     if input_number == 0:
         return [0]
 
-    output_number = []
+    output_number: list[float] = []
     while input_number > 0:
         output_number.append(((input_number*10)%int(base*10))/10)
         input_number = (input_number*10)//int(base*10)
@@ -45,7 +45,7 @@ def int2anybase2(input_number:int, base:float) -> list[float]:
 
     return output_number
 
-def anybase2anybase(input_number:list, input_base:int, output_base:int) -> list[int]:
+def anybase2anybase(input_number:list[int], input_base:int, output_base:int) -> list[int]:
     processing_nuber = 0
     for i in range(len(input_number)):
         processing_nuber += input_number[len(input_number)-i-1]*input_base**i
@@ -53,7 +53,7 @@ def anybase2anybase(input_number:list, input_base:int, output_base:int) -> list[
     if processing_nuber == 0:
         return [0]
 
-    output_number = []
+    output_number: list[int] = []
     while processing_nuber > 0:
         output_number.append(processing_nuber%output_base)
         processing_nuber = processing_nuber//output_base
