@@ -1,28 +1,19 @@
 import tkinter
 from tkinter import scrolledtext
 from tkinter.filedialog import askopenfilename, asksaveasfilename
-import math
-from PIL import Image as PILImage
-from PIL import ImageTk as PILImageTk
+#import math
+#from PIL import Image as PILImage
+#from PIL import ImageTk as PILImageTk
 import os
 import platform
 import time
 from random import randint
+from typing import Literal
+
+from hilfsfunktionen import IntToBit, BitToInt
 
 
-def IntToBit(x:int, lenght = 8) -> str:
-        return "0"*((math.ceil((len(bin(x))-2)/lenght)*lenght+2)-len(bin(x))) + bin(x)[2:]
-
-def BitToInt(s:str, anz_bit= 8) -> list:
-        r= []
-        for i in range(len(s)//anz_bit):
-            r.append(int(s[i*anz_bit:(i+1)*anz_bit], 2))
-        if len(s)%anz_bit != 0:
-            r.append(int(s[(len(s)//anz_bit)*anz_bit:], 2))
-        return r
-
-
-def save_file(text, return_path:bool = False):
+def save_file(text:str, return_path:bool = False):
     """Save the 'text' as a new file."""
 
     filepath = asksaveasfilename(
@@ -34,7 +25,8 @@ def save_file(text, return_path:bool = False):
     content = bytes(BitToInt(text))
     with open(filepath, "wb") as f:
         f.write(content)
-    if return_path: return filepath
+    if return_path:
+        return filepath
 
 def open_file():
     """Open a file for editing."""
@@ -45,7 +37,7 @@ def open_file():
         return
     with open(filepath, mode="rb") as f:
         content = f.read()
-        content_arr = []
+        content_arr: list[int] = []
         for i in content:
             content_arr.append(i)
         #print(content_arr)
@@ -54,18 +46,19 @@ def open_file():
 
 
 class GUI():
-    def __init__(self, version, gui_version, texts = {"o":"", "p":"", "v":"", "e":""}, chunk = 16, KEY = ["",""], debug = False) -> None:
-        self.texts = texts
-        self.KEY = KEY
+    def __init__(self, version: str, gui_version: str, texts: dict[str, str]={"o":"", "p":"", "v":"", "e":""}, chunk: int=16, KEY: tuple[str, str]=("",""), debug: bool=False) -> None:
+        self.texts: dict[str, str] = texts
+        self.key = KEY
         self.chunk = chunk
         self.debug = debug
         
-        if self.debug: print(version, version[11:-3], f"\nfrom {version[:-3]} import Verschlüsselung")
+        if self.debug:
+            print(version, version[11:-3], f"\nfrom {version[:-3]} import Verschlüsselung")
 
         self.create_gui(version_index=version[11:-3], gui_version=gui_version)
         #way : True -> Ent; False -> Ver
 
-    def create_gui(self, version_index, gui_version):
+    def create_gui(self, version_index: str, gui_version: str):
         self.main_window = tkinter.Tk()
         self.main_window.title(f"\"QED_GUI\" - version: {gui_version} // \"QED_system\" - version: {version_index}")
         #main_window.geometry("1920x1080")
@@ -101,7 +94,7 @@ class GUI():
         self.key_lbl.grid(row=0, column=0, padx=5, pady=5, sticky="nw")
         self.key_btn = tkinter.Button(master=self.key_btns, background = "#ffffff", fg = "#000000", text="Schlüssel-Datei öffnen", command=lambda: self.open_file_f("k"))
         self.key_btn.grid(row=0, column=1, padx=5, pady=5, sticky="nw")
-        self.key_lbl = tkinter.Label(master=self.key_btns, background = "#ffffff", fg = "#000000", text=self.KEY[1])
+        self.key_lbl = tkinter.Label(master=self.key_btns, background = "#ffffff", fg = "#000000", text=self.key[1])
         self.key_lbl.grid(row=0, column=2, padx=5, pady=5, sticky="nw")
         self.key_btn_X = tkinter.Button(master=self.key_btns, background = "#ffffff", fg = "#000000", text="X", command=lambda: self.delete_file_f("k"))
         self.key_btn_X.grid(row=0, column=3, padx=5, pady=5, sticky="nw")
@@ -119,11 +112,11 @@ class GUI():
         """ORIGINAL"""
         self.TEXT_o_lbl = tkinter.Label(master=self.o_btns, background = "#ffffff", fg = "#000000", text="Bitte Text eingeben:")
         self.TEXT_o_lbl.grid(row=0, column=0, padx=5, pady=5, sticky="nw")
-        self.TEXT_o_btn_o = tkinter.Button(master=self.o_btns, background = "#ffffff", fg = "#000000", text="Textdatei öffnen", command=lambda: self.open_file_f("o"))
+        self.TEXT_o_btn_o = tkinter.Button(master=self.o_btns, background = "#ffffff", fg = "#000000", text="Textdatei öffnen", command=lambda: self.open_file_f())#"o"))
         self.TEXT_o_btn_o.grid(row=0, column=1, padx=5, pady=5, sticky="nw")
         self.TEXT_o_lbl_p = tkinter.Label(master=self.o_btns, background = "#ffffff", fg = "#000000", text=self.texts["p"])
         self.TEXT_o_lbl_p.grid(row=0, column=2, padx=5, pady=5, sticky="nw")
-        self.TEXT_o_btn_x = tkinter.Button(master=self.o_btns, background = "#ffffff", fg = "#000000", text="X", command=lambda: self.delete_file_f("o"))
+        self.TEXT_o_btn_x = tkinter.Button(master=self.o_btns, background = "#ffffff", fg = "#000000", text="X", command=lambda: self.delete_file_f())#"o"))
         self.TEXT_o_btn_x.grid(row=0, column=3, padx=5, pady=5, sticky="nw")
         self.TEXT_o_sct = scrolledtext.ScrolledText(master=self.main_window, wrap="word", background = "#ffffff", fg = "#000000")
         self.TEXT_o_sct.grid(row=2, column=0, padx=5, pady=5, sticky="nw", columnspan=2)
@@ -152,55 +145,70 @@ class GUI():
         self.main_window.mainloop()
 
     def start(self):
-        if (self.texts["o"] != "") and (self.KEY[0] != ""):
-            if self.debug: print("Verarbeiten...")
+        if (self.texts["o"] != "") and (self.key[0] != ""):
+            if self.debug:
+                print("Verarbeiten...")
             duration = time.time()
-            v = Verschlüsselung(chunk = self.chunk, debug = False)
-            self.texts["v"] = v.verschlüsseln(text = self.texts["o"], KEY = self.KEY[0])
-            self.texts["e"] = v.entschlüsseln(text = self.texts["o"], KEY = self.KEY[0])
+            v = Verschlüsselung(chunk = self.chunk, debug = False) # type: ignore  # noqa: F821
+            self.texts["v"] = v.verschlüsseln(text = self.texts["o"], KEY = self.key[0]) # type: ignore  # noqa: F821
+            self.texts["e"] = v.entschlüsseln(text = self.texts["o"], KEY = self.key[0]) # type: ignore  # noqa: F821
+            assert isinstance(self.texts["v"], str), "This should be the case, else something went wrong."
+            assert isinstance(self.texts["e"], str), "This should be the case, else something went wrong."
             duration = time.time() - duration
-            if self.debug: print("duration: ", duration)
-            if self.debug: print("V: ", bytes(BitToInt(self.texts["v"])), "\n\n", "E:", bytes(BitToInt(self.texts["e"])))
+            if self.debug:
+                print("duration: ", duration)
+            if self.debug:
+                print("V: ", bytes(BitToInt(self.texts["v"])), "\n\n", "E:", bytes(BitToInt(self.texts["e"])))
 
             #self.texts["v2"] = BitToStr(self.texts["v"])
             #self.texts["e2"] = BitToStr(self.texts["e"])
             self.TEXT_v_sct.configure(state="normal")
             self.TEXT_v_sct.delete("1.0", tkinter.END)
-            self.TEXT_v_sct.insert(tkinter.INSERT, bytes(BitToInt(self.texts["v"])))
+            self.TEXT_v_sct.insert(tkinter.INSERT, bytes(BitToInt(self.texts["v"])).decode("utf-8", errors="replace"))
             self.TEXT_v_sct.configure(state="disabled")
 
             self.TEXT_e_sct.configure(state="normal")
             self.TEXT_e_sct.delete("1.0", tkinter.END)
-            self.TEXT_e_sct.insert(tkinter.INSERT, bytes(BitToInt(self.texts["e"])))
+            self.TEXT_e_sct.insert(tkinter.INSERT, bytes(BitToInt(self.texts["e"])).decode("utf-8", errors="replace"))
             self.TEXT_e_sct.configure(state="disabled")
-            if self.debug: print("fertig")
+            if self.debug:
+                print("fertig")
 
 
-    def open_file_f(self, w=None):
+    def open_file_f(self, w: Literal["k", "kg"] | None=None):
         if w == "k":
-            self.KEY[0], self.KEY[1] = open_file()
-            if self.debug: print("Schlüssel: ", self.KEY[0])
-            self.key_lbl.configure(text=str(self.KEY[1]))
+            _open_ret = open_file()
+            if _open_ret is None:
+                return
+            self.key = _open_ret
+            if self.debug:
+                print("Schlüssel: ", self.key[0])
+            self.key_lbl.configure(text=str(self.key[1]))
         elif w == "kg":
             pass
         else:
-            self.texts["o"], self.texts["p"]= open_file()
-            if self.debug: print("Original Text:",self.texts["o"])
+            _open_ret = open_file()
+            if _open_ret is None:
+                return
+            self.texts["o"], self.texts["p"] = _open_ret
+            if self.debug:
+                print("Original Text:",self.texts["o"])
             self.TEXT_o_sct.configure(state="normal")
             self.TEXT_o_sct.delete("1.0", tkinter.END)
-            self.TEXT_o_sct.insert(tkinter.INSERT, bytes(BitToInt(self.texts["o"])))
+            self.TEXT_o_sct.insert(tkinter.INSERT, bytes(BitToInt(self.texts["o"])).decode("utf-8", errors="replace"))
             self.TEXT_o_sct.configure(state="disabled")
             self.TEXT_o_lbl_p.configure(text=str(self.texts["p"]))
 
     def save_key(self):
         key = IntToBit(randint(1,2**(8*int(self.keygen_len_entry.get()))))
         filepath = save_file(key, return_path=True)
-        self.KEY[0] = key
-        self.KEY[1] = filepath
+        if filepath is None:
+            return
+        self.key = key, filepath
 
-    def delete_file_f(self, w=None):
+    def delete_file_f(self, w: Literal["k"] | None=None):
         if w == "k":
-            self.KEY[0], self.KEY[1] = "", ""
+            self.key = ("", "")
             self.key_lbl.configure(text="")
         else:
             self.texts["o"], self.texts["p"] = "", ""
@@ -210,19 +218,19 @@ class GUI():
             self.TEXT_o_lbl_p.configure(text="")
 
 
-    def use_as_input(self, what):
+    def use_as_input(self, what: Literal["v", "e"]):
         if what == "v":
             self.texts["o"] = self.texts["v"]
             self.TEXT_o_sct.configure(state="normal")
             self.TEXT_o_sct.delete("1.0", tkinter.END)
-            self.TEXT_o_sct.insert(tkinter.INSERT, bytes(BitToInt(self.texts["o"])))
+            self.TEXT_o_sct.insert(tkinter.INSERT, bytes(BitToInt(self.texts["o"])).decode("utf-8", errors="replace"))
             self.TEXT_o_sct.configure(state="disabled")
             self.start()
         elif what == "e":
             self.texts["o"] = self.texts["e"]
             self.TEXT_o_sct.configure(state="normal")
             self.TEXT_o_sct.delete("1.0", tkinter.END)
-            self.TEXT_o_sct.insert(tkinter.INSERT, bytes(BitToInt(self.texts["o"])))
+            self.TEXT_o_sct.insert(tkinter.INSERT, bytes(BitToInt(self.texts["o"])).decode("utf-8", errors="replace"))
             self.TEXT_o_sct.configure(state="disabled")
             self.start()
 
@@ -241,10 +249,14 @@ if __name__ == "__main__":
     file = os.listdir(path)
     file.sort()
 
+    version: str | None = None
+
     for i in range(len(file)-1, 0, -1):
         if file[i][:11] == "QED_system_":
             version = file[i]
             break
+    if version is None:
+        exit(1)
     
     exec(f"from {version[:-3]} import Verschlüsselung")
 

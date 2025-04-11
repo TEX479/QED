@@ -4,18 +4,7 @@ import time
 import multiprocessing
 from typing import Any, Literal
 import hilfsfunktionen
-
-def BitToInt(s:str, anz_bit:int= 8) -> list[int]:
-        """
-        returns list[int] with int.len() == "anz_bit"
-        """
-        r: list[int]= []
-        for i in range(len(s)//anz_bit):
-            r.append(int(s[i*anz_bit:(i+1)*anz_bit], 2))
-        if len(s)%anz_bit != 0:
-            r.append(int(s[(len(s)//anz_bit)*anz_bit:], 2))
-        return r
-
+from hilfsfunktionen import BitToInt
 
 class Verschlüsselung():
     def __init__(self, chunk:int = 16, debug:bool = True, cube_field_data_size:int = 1, debug_c:bool=False, debug_f:bool=False) -> None:
